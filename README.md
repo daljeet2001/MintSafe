@@ -1,6 +1,19 @@
-# Turborepo starter
+# MintSafe
 
-This is an official starter Turborepo.
+A modern monorepo project powered by Turborepo.
+
+## Tech Stack
+
+- **Monorepo:** [Turborepo](https://turbo.build/)
+- **Frontend:** [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/)
+- **Backend:** [Express.js](https://expressjs.com/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/)
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+- **CI/CD Pipeline:** Integrated
+- **Containerization:** Docker (includes Dockerfile)
+
+---
 
 ## Using this example
 
