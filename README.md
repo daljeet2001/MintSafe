@@ -1,6 +1,6 @@
 # MintSafe
 
-A modern monorepo project powered by Turborepo.
+A modern monorepo project powered by Turborepo is a payment service.
 
 ## Tech Stack
 
