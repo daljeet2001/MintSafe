@@ -90,6 +90,7 @@ Follow these steps to start the project locally:
    ```sh
    git clone <your-repo-url>
    cd <repo-folder>
+   npm install
    ```
 
 2. **Start PostgreSQL locally using Docker**
