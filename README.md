@@ -82,6 +82,44 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
+# Getting Started Locally
+
+Follow these steps to start the project locally:
+
+1. **Clone the repository**
+   ```sh
+   git clone <your-repo-url>
+   cd <repo-folder>
+   ```
+
+2. **Start PostgreSQL locally using Docker**
+   ```sh
+   docker run --name local-postgres -e POSTGRES_PASSWORD=yourpassword -p 5432:5432 -d postgres
+   ```
+
+3. **Set up the database connection**
+   - Copy your `DATABASE_URL` and paste it into the `.env` file inside `packages/db`.
+
+4. **Run Prisma commands in `packages/db`**
+   ```sh
+   cd packages/db
+   npx prisma migrate dev
+   npx prisma generate
+   npx prisma db seed
+   ```
+
+5. **Go back to the root directory**
+   ```sh
+   cd ../..
+   ```
+
+6. **Start the development server**
+   ```sh
+   npm run dev
+   ```
+
+Your application should now be running
+
 ## Useful Links
 
 Learn more about the power of Turborepo:
