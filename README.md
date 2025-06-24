@@ -108,12 +108,21 @@ Follow these steps to start the project locally:
    npx prisma db seed
    ```
 
-5. **Go back to the root directory**
+5. **Add a `.env` file to `apps/user-app`**
+
+Create a file named `.env` inside the `apps/user-app` directory with the following contents:
+
+```
+NEXTAUTH_URL="http://localhost:3001"
+JWT_SECRET="your_jwt_secret"
+```
+
+6. **Go back to the root directory**
    ```sh
    cd ../..
    ```
 
-6. **Start the development server**
+7. **Start the development server**
    ```sh
    npm run dev
    ```
