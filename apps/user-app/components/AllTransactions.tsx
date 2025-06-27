@@ -1,6 +1,6 @@
-import { Card } from "@repo/ui/card"
+import { Card } from "@repo/ui/card";
 
-export const OnRampTransactions = ({
+export const AllTransactions = ({
   transactions,
 }: {
   transactions: {
@@ -12,7 +12,7 @@ export const OnRampTransactions = ({
 }) => {
   if (!transactions.length) {
     return (
-      <Card title="Recent Transactions">
+      <Card title="All Transactions">
         <div className="text-center text-sm text-gray-500 pb-8 pt-8">
           No recent transactions
         </div>
@@ -21,20 +21,26 @@ export const OnRampTransactions = ({
   }
 
   return (
-    <Card title="Recent Transactions">
+    <Card title="All Transactions">
       <div className="pt-2 space-y-4">
         {transactions.map((t, i) => {
           const isFailed = t.status.toLowerCase() === "failure";
           const isProcessing = t.status.toLowerCase() === "processing";
+          const isP2PSent = t.provider === "P2P (Sent)";
+          const amount = (t.amount / 100).toFixed(2);
 
           let amountClass = "text-green-600";
           let amountPrefix = "+₹";
+
           if (isFailed) {
             amountClass = "text-red-600";
             amountPrefix = "₹";
           } else if (isProcessing) {
             amountClass = "text-amber-500 animate-pulse";
             amountPrefix = "₹";
+          } else if (isP2PSent) {
+            amountClass = "text-red-600";
+            amountPrefix = "-₹";
           }
 
           return (
@@ -49,7 +55,7 @@ export const OnRampTransactions = ({
                     {t.provider}
                   </span>
                 </div>
-                   <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500">
                   {t.time.toLocaleDateString()} —        <span
                 className={`text-xs font-semibold ${
                   isFailed
@@ -66,7 +72,7 @@ export const OnRampTransactions = ({
 
               <div className={`text-sm font-semibold mt-1 ${amountClass}`}>
                 {amountPrefix}
-                {(t.amount / 100).toFixed(2)}
+                {amount}
               </div>
             </div>
           );
@@ -75,4 +81,3 @@ export const OnRampTransactions = ({
     </Card>
   );
 };
-

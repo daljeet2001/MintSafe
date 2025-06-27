@@ -1,52 +1,58 @@
-"use client"
+"use client";
+
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
-import { Center } from "@repo/ui/center";
 import { Select } from "@repo/ui/select";
 import { useState } from "react";
 import { TextInput } from "@repo/ui/textinput";
 import { createOnRampTransaction } from "../app/lib/actions/createOnrampTransaction";
 
-
-const SUPPORTED_BANKS = [{
-    name: "HDFC Bank",
-    redirectUrl: "https://netbanking.hdfcbank.com"
-}, {
-    name: "Axis Bank",
-    redirectUrl: "https://www.axisbank.com/"
-}];
+const SUPPORTED_BANKS = [
+  { name: "HDFC Bank", redirectUrl: "https://netbanking.hdfcbank.com" },
+  { name: "Axis Bank", redirectUrl: "https://www.axisbank.com/" },
+];
 
 export const AddMoney = () => {
-    const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
-    const [value, setValue] = useState(0)
-    const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
-    return <Card title="Add Money">
-    <div className="w-full">
-        <TextInput label={"Amount"} placeholder={"Amount"} onChange={(val) => {
-            setValue(Number(val))
-        }} />
-        <div className="py-4 text-left">
-            Bank
-        </div>
-        <Select onSelect={(value) => {
-            setRedirectUrl(SUPPORTED_BANKS.find(x => x.name === value)?.redirectUrl || "")
-            setProvider(SUPPORTED_BANKS.find(x => x.name === value)?.name || "");
-        }} options={SUPPORTED_BANKS.map(x => ({
+  const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
+  const [value, setValue] = useState(0);
+  const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
+
+  return (
+    <Card title="Add Money">
+      <div className="w-full space-y-4">
+        {/* Amount Input */}
+        <TextInput
+          label="Enter Amount"
+          placeholder="e.g., ₹1000"
+          onChange={(val) => setValue(Number(val))}
+        />
+
+        {/* Bank Selector */}
+        <div className="text-sm font-medium text-gray-700">Select Bank</div>
+        <Select
+          onSelect={(value) => {
+            const bank = SUPPORTED_BANKS.find((x) => x.name === value);
+            setRedirectUrl(bank?.redirectUrl || "");
+            setProvider(bank?.name || "");
+          }}
+          options={SUPPORTED_BANKS.map((x) => ({
             key: x.name,
-            value: x.name
-        }))} />
-        <div className="flex justify-center pt-4">
-            <Button onClick={async() => {
-                await createOnRampTransaction(provider, value)
-                //after this user will be redirected to banking provider page and then banking server will hit our bank-weebhook server
-                //on http://localhost:3003/hdfcWebhook to give us signal to add money in user's MintSafe acc
+            value: x.name,
+          }))}
+        />
 
-
-                window.location.href = redirectUrl || "";
-            }}>
+        {/* Add Money Button */}
+        <div className="pt-2">
+          <Button
+            onClick={async () => {
+              await createOnRampTransaction(provider, value);
+              window.location.href = redirectUrl || "";
+            }}
+          >
             Add Money
-            </Button>
+          </Button>
         </div>
-    </div>
-</Card>
-}
+      </div>
+    </Card>
+  );
+};
