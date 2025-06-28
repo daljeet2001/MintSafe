@@ -1,6 +1,5 @@
 import { Button } from "./button";
-import Image from "next/image";
-import Logo from "../assets/logo4.png";
+import { CreditCard } from "lucide-react";
 
 interface AppbarProps {
   user?: {
@@ -12,19 +11,24 @@ interface AppbarProps {
 
 export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   return (
-    <div className="flex justify-between items-center px-6 py-3 h-16 border-b border-gray-200 bg-white shadow-sm">
-      {/* Logo */}
-      <div className="flex items-center justify-center h-full">
-        <Image src={Logo} alt="MintSafe Logo" width={160} height={40} />
-      </div>
+    <header className="bg-white shadow-md border-b border-gray-100 px-6 py-2">
+      <div className="max-w-7xl mx-auto flex items-center justify-between h-16">
+        
+        {/* Icon as Logo */}
+        <div className="flex items-center h-full">
+          <CreditCard className="w-8 h-8 text-[#14BA6C]" />
+          <span className="ml-2 font-bold text-xl text-[#1E1E1F]">MintSafe</span>
+        </div>
 
-      {/* Button */}
-      <div className="flex justify-center items-center h-full">
-        <Button onClick={user ? onSignout : onSignin}>
-          {user ? "Logout" : "Login"}
-        </Button>
+        {/* Right section */}
+        <div className="flex items-center gap-4 ">
+          <Button onClick={user ? onSignout : onSignin}>
+            {user ? "Logout" : "Login"}
+          </Button>
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
+
 

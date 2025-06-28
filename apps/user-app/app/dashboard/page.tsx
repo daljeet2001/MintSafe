@@ -1,10 +1,15 @@
-import prisma from "@repo/db/client";
-import { AddMoney } from "../../../components/AddMoneyCard";
-import { BalanceCard } from "../../../components/BalanceCard";
-import { AllTransactions } from "../../../components/AllTransactions";
-import { SendCard } from "../../../components/SendCard";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "../lib/auth";
+import prisma from "@repo/db/client"
+import { BalanceCard } from "../../components/Balancev2";
+import { Transactions } from "../../components/Transactionsv2";
+import { HeroSection } from "../../components/HeroSection";
+import { FeaturesGrid } from "../../components/FeaturedGrid";
+import { SupportBanner } from "../../components/SupportBanner";
+import { BusinessSection } from "../../components/BusinessSection";
+import { WelcomeCard } from "../../components/WelcomeCard";
+import { Testimonials } from "../../components/Testimonials";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -76,22 +81,38 @@ export default async function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 py-6 px-4 md:px-10">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
+    <div className="min-h-screen bg-[#F7F7F7] pb-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 space-y-8">
+        {/* Top Section - Welcome and Financial Overview */}
+     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {/* Left Column - Welcome and Balance */}
+  <div className="space-y-6">
+    <WelcomeCard phone="7973065721" />
+    <BalanceCard amount={balance.amount} locked={balance.locked} />
+  </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* Left section: Add Money */}
-        <div className="space-y-4">
-          <AddMoney />
-          <SendCard />  
+  {/* Right Section - Transactions spanning 2 cols */}
+  <div className="lg:col-span-2">
+    <Transactions transactions={allTransactions} />
+  </div>
+</div>
+
+
+        {/* Testimonials Section */}
+        <div className="mt-8">
+          <Testimonials />
         </div>
 
-        {/* right section: Balance + Transactions */}
-        <div className="lg:col-span-2 space-y-4">
-          <BalanceCard amount={balance.amount} locked={balance.locked} />
-          <AllTransactions transactions={allTransactions} />
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-8" />
+
+        {/* Marketing Sections */}
+        <div className="space-y-12">
+          <HeroSection />
+          <FeaturesGrid />
+          <SupportBanner />
+          <BusinessSection />
         </div>
-       
       </div>
     </div>
   );

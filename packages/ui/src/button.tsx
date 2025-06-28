@@ -12,7 +12,7 @@ export const Button = ({ onClick, children }: ButtonProps) => {
     <button
       onClick={onClick}
       type="button"
-      className="text-white bg-[#00d27f] hover:bg-[#00b46c] focus:outline-none focus:ring-4 focus:ring-[#00d27f]/40 font-medium rounded-lg text-sm px-5 py-2.5 transition duration-200 shadow-md hover:shadow-lg"
+       className="bg-[#14BA6C] hover:bg-[#12a15e] text-white px-4 py-2 rounded-lg text-sm font-medium transition"
     >
       {children}
     </button>
