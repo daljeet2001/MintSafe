@@ -38,7 +38,7 @@ export const Transactions = ({transactions}
             iconBg = "bg-red-500";
           } else if (isProcessing) {
             amountClass = "text-amber-500 animate-pulse";
-            icon = <ArrowUpRight className="w-5 h-5 text-white" />;
+            icon = <ArrowDownRight className="w-5 h-5 text-white" />;
             iconBg = "bg-amber-500";
           } else if (isP2PSent) {
             amountClass = "text-red-600";
