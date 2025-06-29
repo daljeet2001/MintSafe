@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const [step, setStep] = useState<"phone" | "otp">("phone");
@@ -23,7 +24,7 @@ export default function SignInPage() {
   };
 
   const sendOtp = async () => {
-    if (!/^\d{10}$/.test(phone)) return alert("Enter valid phone number");
+    if (!/^\d{10}$/.test(phone)) return toast.error("Enter valid phone number");
     setLoading(true);
     try {
       const res = await fetch("/api/send-otp", {
@@ -31,9 +32,9 @@ export default function SignInPage() {
         body: JSON.stringify({ phone }),
       });
       if (res.ok) setStep("otp");
-      else alert("Failed to send OTP");
+      else toast.error("Failed to send OTP");
     } catch {
-      alert("Error");
+      toast.error("Error");
     }
     setLoading(false);
   };
@@ -48,18 +49,13 @@ export default function SignInPage() {
       otp,
     });
     if (result?.ok) router.push("/dashboard");
-    else alert("Invalid OTP");
+    else toast.error("Invalid OTP");
     setLoading(false);
   };
 
-  const handleFacebookLogin = async () => {
-    setLoading(true);
-    const result = await signIn("facebook", {
-      redirect: false,
-    });
-    if (result?.ok) router.push("/dashboard");
-    else alert("Facebook login failed");
-    setLoading(false);
+  const handleGithubLogin = async () => {
+    toast.loading("Redirecting");
+    signIn("github", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -67,9 +63,7 @@ export default function SignInPage() {
       <div className="w-full max-w-sm">
         {/* App logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            MintSafe
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">MintSafe</h1>
         </div>
 
         <div className="bg-white border border-gray-300 rounded-sm p-6 mb-4">
@@ -90,6 +84,24 @@ export default function SignInPage() {
               >
                 {loading ? "Sending..." : "Send OTP"}
               </button>
+
+              <div className="flex items-center my-2">
+              <div className="flex-grow h-px bg-gray-300" />
+                <span className="mx-2 text-gray-500 text-sm font-medium">OR</span>
+              <div className="flex-grow h-px bg-gray-300" />
+              </div>
+
+
+
+              <div className="text-center">
+                <button
+                  onClick={handleGithubLogin}
+                  disabled={loading}
+                  className="w-full bg-gray-800 hover:bg-gray-900 text-white py-2 px-4 font-semibold rounded-sm text-sm mb-4 transition-colors"
+                >
+                  {loading ? "Logging in..." : "Sign in with GitHub"}
+                </button> 
+                </div>
             </>
           ) : (
             <>
@@ -129,11 +141,9 @@ export default function SignInPage() {
               </div>
             </>
           )}
-
-    
         </div>
 
-        {/* Resend OTP link for OTP step */}
+        {/* Resend OTP */}
         {step === "otp" && (
           <div className="text-center mb-4">
             <p className="text-gray-600 text-sm">
@@ -148,13 +158,12 @@ export default function SignInPage() {
             </p>
           </div>
         )}
+
+
       </div>
     </div>
   );
 }
-
-
-
 
 
 

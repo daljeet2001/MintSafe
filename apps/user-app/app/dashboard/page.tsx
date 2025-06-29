@@ -11,8 +11,10 @@ import { BusinessSection } from "../../components/BusinessSection";
 import { WelcomeCard } from "../../components/WelcomeCard";
 import { Testimonials } from "../../components/Testimonials";
 
+
 async function getBalance() {
   const session = await getServerSession(authOptions);
+  // console.log("Session:", session);
   const balance = await prisma.balance.findFirst({
     where: { userId: Number(session?.user?.id) },
   });
