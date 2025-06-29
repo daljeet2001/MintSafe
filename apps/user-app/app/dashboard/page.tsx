@@ -22,6 +22,16 @@ async function getBalance() {
     locked: balance?.locked || 0,
   };
 }
+export async function getUserPhoneNumber() {
+  const session = await getServerSession(authOptions);
+  const user = await prisma.user.findUnique({
+    where: { id: Number(session?.user?.id) },
+    select: { number: true },
+  });
+
+  return user?.number || "Unknown";
+}
+
 
 async function getP2PTransactions() {
   const session = await getServerSession(authOptions);
@@ -71,6 +81,7 @@ async function getOnRampTransactions() {
 
 export default async function DashboardPage() {
   const balance = await getBalance();
+  const userPhone = await getUserPhoneNumber();
   const [onramp, p2p] = await Promise.all([
     getOnRampTransactions(),
     getP2PTransactions(),
@@ -87,7 +98,7 @@ export default async function DashboardPage() {
      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
   {/* Left Column - Welcome and Balance */}
   <div className="space-y-6">
-    <WelcomeCard phone="7973065721" />
+    <WelcomeCard phone={userPhone}/>
     <BalanceCard amount={balance.amount} locked={balance.locked} />
   </div>
 

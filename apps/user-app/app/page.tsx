@@ -1,11 +1,33 @@
-import React from 'react'
+import { HeroSection } from "../components/HeroSection";
+import { FeaturesGrid } from "../components/FeaturedGrid";
+import { SupportBanner } from "../components/SupportBanner";
+import { BusinessSection } from "../components/BusinessSection";
+import { Testimonials } from "../components/Testimonials";
 
-const page = () => {
+
+
+export default async function LandingPage() {
+
   return (
-    <div>
-      landing page
-    </div>
-  )
-}
+    <div className="min-h-screen bg-[#F7F7F7] pb-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 space-y-8">
 
-export default page
+        {/* Testimonials Section */}
+        <div className="mt-8">
+          <Testimonials />
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-8" />
+
+        {/* Marketing Sections */}
+        <div className="space-y-12">
+          <HeroSection />
+          <FeaturesGrid />
+          <SupportBanner />
+          <BusinessSection />
+        </div>
+      </div>
+    </div>
+  );
+}

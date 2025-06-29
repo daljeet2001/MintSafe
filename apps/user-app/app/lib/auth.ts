@@ -1,66 +1,70 @@
 import db from "@repo/db/client";
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcrypt";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { Twilio } from "twilio";
+
+const twilioClient = new Twilio(process.env.TWILIO_SID!, process.env.TWILIO_AUTH_TOKEN!);
+const SERVICE_SID = process.env.TWILIO_SERVICE_SID!;
 
 export const authOptions = {
-    providers: [
-      CredentialsProvider({
-          name: 'Credentials',
-          credentials: {
-            phone: { label: "Phone number", type: "text", placeholder: "Phone number", required: true },
-            password: { label: "Password", placeholder:"password", type: "password", required: true }
-          },
-          // TODO: User credentials type from next-aut
-          async authorize(credentials: any) {
-            // Do zod validation, OTP validation here
-            const hashedPassword = await bcrypt.hash(credentials.password, 10);
-            const existingUser = await db.user.findFirst({
-                where: {
-                    number: credentials.phone
-                }
+  providers: [
+    CredentialsProvider({
+      name: "PhoneOTP",
+      credentials: {
+        phone: { label: "Phone Number", type: "text", required: true },
+        otp: { label: "OTP", type: "text", required: true },
+      },
+      async authorize(credentials: any) {
+        const { phone, otp } = credentials;
+
+        if (!phone || !otp) return null;
+
+        try {
+          // ✅ Verify OTP with Twilio
+          const result = await twilioClient.verify.v2
+            .services(SERVICE_SID)
+            .verificationChecks.create({
+              to: `+91${phone}`,
+              code: otp,
             });
 
-            if (existingUser) {
-                const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
-                if (passwordValidation) {
-                    return {
-                        id: existingUser.id.toString(),
-                        name: existingUser.name,
-                        email: existingUser.number
-                    }
-                }
-                return null;
+          if (result.status === "approved") {
+            // ✅ Find or create user
+            let user = await db.user.findUnique({
+              where: { number: phone },
+            });
+
+            if (!user) {
+              user = await db.user.create({
+                data: { number: phone },
+              });
             }
 
-            try {
-                const user = await db.user.create({
-                    data: {
-                        number: credentials.phone,
-                        password: hashedPassword
-                    }
-                });
-            
-                return {
-                    id: user.id.toString(),
-                    name: user.name,
-                    email: user.number
-                }
-            } catch(e) {
-                console.error(e);
-            }
+            return {
+              id: user.id.toString(),
+              name: user.name || null,
+              number: user.number, 
+            };
+          }
 
-            return null
-          },
-        })
-    ],
-    secret: process.env.JWT_SECRET || "secret",
-    callbacks: {
-        // TODO: can u fix the type here? Using any is bad
-        async session({ token, session }: any) {
-            session.user.id = token.sub
-
-            return session
+          return null;
+        } catch (error) {
+          console.error("OTP verification failed:", error);
+          return null;
         }
-    }
-  }
-  
+      },
+    }),
+  ],
+
+  secret: process.env.JWT_SECRET || "secret",
+
+  callbacks: {
+    async session({ token, session }: any) {
+      session.user.id = token.sub;
+      return session;
+    },
+  },
+
+  pages: {
+    signIn: "/signin",
+  },
+};

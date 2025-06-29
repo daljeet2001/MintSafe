@@ -12,7 +12,7 @@ interface AppbarProps {
 export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   return (
     <header className="bg-white shadow-md border-b border-gray-100 px-6 py-2">
-      <div className="max-w-7xl mx-auto flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto flex items-center justify-between h-12">
         
         {/* Icon as Logo */}
         <div className="flex items-center h-full">
