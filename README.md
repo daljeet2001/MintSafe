@@ -9,9 +9,10 @@ A modern monorepo project powered by Turborepo is a payment service.
 - **Backend:** [Express.js](https://expressjs.com/)
 - **Database:** [PostgreSQL](https://www.postgresql.org/)
 - **ORM:** [Prisma](https://www.prisma.io/)
-- **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+- **Authentication:** [NextAuth.js](https://next-auth.js.org/) **uses twilio for otp verification
 - **CI/CD Pipeline:** Integrated
 - **Containerization:** Docker (includes Dockerfile)
+- **Rate Limiting &Captchas
 
 ---
 
