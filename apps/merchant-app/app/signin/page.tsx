@@ -99,12 +99,12 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 font-sans px-4">
       <div className="w-full max-w-sm">
-
-   
         <div className="bg-white  border border-gray-300 rounded-sm p-6 mb-4">
-        <div className="text-center mb-8">
+
+           <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Sign in</h1>
         </div>
+
 
           {step === "phone" ? (
   <div className="w-[300px] mx-auto">
@@ -210,6 +210,3 @@ export default function SignInPage() {
     </div>
   );
 }
-
-
-

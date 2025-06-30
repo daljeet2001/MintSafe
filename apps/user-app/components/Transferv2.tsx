@@ -16,8 +16,12 @@ export const TransferCard = ({balance,available}:{balance:string,available:strin
   const handleTransfer = async () => {
     try {
       setStatus("idle");
-      const res = await p2pTransfer(phoneNumber, amount);
+      const res:any = await p2pTransfer(phoneNumber, amount);
       console.log("Response:", res);
+      if(res.message=="User not found"){
+        setStatus("error")
+        return
+      }
       setStatus("success");
     } catch (err) {
       console.error("Error:", err);
