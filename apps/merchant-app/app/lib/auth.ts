@@ -8,6 +8,7 @@ const SERVICE_SID = process.env.TWILIO_SERVICE_SID!;
 
 export const authOptions = {
   providers: [
+    // ✅ OTP-based credentials provider
     CredentialsProvider({
       name: "PhoneOTP",
       credentials: {
@@ -16,11 +17,9 @@ export const authOptions = {
       },
       async authorize(credentials: any) {
         const { phone, otp } = credentials;
-
         if (!phone || !otp) return null;
 
         try {
-          // ✅ Verify OTP with Twilio
           const result = await twilioClient.verify.v2
             .services(SERVICE_SID)
             .verificationChecks.create({
@@ -29,21 +28,19 @@ export const authOptions = {
             });
 
           if (result.status === "approved") {
-            // ✅ Find or create user
-            let user = await db.user.findUnique({
-              where: { number: phone },
-            });
+            let merchant = await db.merchant.findUnique({ where: { number: phone } });
 
-            if (!user) {
-              user = await db.user.create({
+            if (!merchant) {
+              merchant = await db.merchant.create({
                 data: { number: phone },
               });
             }
 
             return {
-              id: user.id.toString(),
-              name: user.name || null,
-              number: user.number, 
+              id: merchant.id.toString(),
+              name: merchant.name || null,
+              number: merchant.number,
+              email: merchant.email || null,
             };
           }
 
@@ -55,6 +52,7 @@ export const authOptions = {
       },
     }),
 
+    // ✅ GitHub OAuth
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
@@ -64,50 +62,61 @@ export const authOptions = {
   secret: process.env.JWT_SECRET || "secret",
 
   callbacks: {
-
-    async signIn({ user, account, profile }:any) {
-    // Create user in DB if using GitHub and user doesn't exist
-    if (account.provider === "github") {
-      const existingUser = await db.user.findUnique({
-        where: { email: user.email! },
-      });
-
-      if (!existingUser) {
-        await db.user.create({
-          data: {
-            email: user.email!,
-            name: user.name || "",
-            number: Math.floor(1000000000 + Math.random() * 9000000000).toString(), // Generate a random number
-          },
-        });
-      }
-    }
-
-    return true;
-  },
-
-  async jwt({ token, user, account }:any) {
-    // If user is logging in for the first time (OAuth or credentials)
-    if (user) {
-      // For credentials (OTP), user already has id
-      token.id = user.id;
-
-      // For GitHub OAuth, fetch user from DB using email
+    async signIn({ user, account, profile }: any) {
       if (account?.provider === "github") {
-        const dbUser = await db.user.findUnique({
-          where: { email: user.email! },
+        const email = profile?.email;
+        const name = profile?.name || "GitHub User";
+
+        if (!email) return false;
+
+        const existingMerchant = await db.merchant.findUnique({
+          where: { email },
         });
 
-        if (dbUser) {
-          token.id = dbUser.id; // ✅ store DB user ID in token
+        if (!existingMerchant) {
+          await db.merchant.create({
+            data: {
+              email,
+              name,
+              number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+            },
+          });
         }
       }
-    }
 
-    return token;
-  },
+      return true;
+    },
+
+    async jwt({ token, user, account, profile }: any) {
+      // Handle OTP login
+      if (user?.number) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+      }
+
+      // Handle GitHub login
+      if (account?.provider === "github" && profile?.email) {
+        const dbMerchant = await db.merchant.findUnique({
+          where: { email: profile.email },
+        });
+
+        if (dbMerchant) {
+          token.id = dbMerchant.id;
+          token.email = dbMerchant.email;
+          token.name = dbMerchant.name;
+        }
+      }
+
+      return token;
+    },
+
     async session({ token, session }: any) {
-      session.user.id = token.id;
+      session.merchant = {
+        id: token.id,
+        email: token.email,
+        name: token.name || null,
+      };
       return session;
     },
   },

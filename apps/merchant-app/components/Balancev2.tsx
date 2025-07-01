@@ -46,15 +46,15 @@ export const BalanceCard = ({
 
         {/* Actions */}
         <div className="mt-6 flex gap-3">
-          <button
+          {/* <button
             onClick={() => setShowTransfer(true)}
             className="bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-full shadow hover:bg-indigo-600 transition"
           >
             Transfer
-          </button>
+          </button> */}
           <button
             onClick={() => setShowDeposit(true)}
-            className="bg-gray-100 text-sm text-gray-700 font-medium px-4 py-2 rounded-full hover:bg-gray-200 transition"
+            className="bg-indigo-500 text-sm text-white font-medium px-4 py-2 rounded-full hover:bg-indigo-600 transition"
           >
             Withdraw
           </button>

@@ -50,7 +50,7 @@ export const RequestCard = ({
             onClick={() => setShowRequestModal(true)}
             className="bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-full shadow hover:bg-indigo-600 transition"
           >
-            Request Money
+            Request
           </button>
       
         </div>

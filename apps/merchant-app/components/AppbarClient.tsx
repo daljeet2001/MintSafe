@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 export function AppbarClient() {
   const session = useSession();
   const router = useRouter();
+  // console.log(session.data)
 
   return (
    <div>
@@ -14,7 +15,7 @@ export function AppbarClient() {
       }}
         onSignout={async () => {
         await signOut( { callbackUrl: "/" })
-      }} user={session.data?.user} />
+      }} merchant={session.data?.merchant} />
    </div>
   );
 }

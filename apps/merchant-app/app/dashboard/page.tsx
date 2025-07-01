@@ -20,7 +20,8 @@ import {RequestCard} from "../../components/RequestCard"
 
 const page = async () => {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/signin");
+  // console.log(session)
+  if (!session?.merchant) redirect("/signin");
   const dummyTransactions = [
   {
     time: new Date("2025-06-25"),
