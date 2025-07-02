@@ -1,21 +1,34 @@
 "use client";
 
 import { X, HandCoins } from "lucide-react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { RequestForm } from "./RequestForm";
 
-export const RequestCard = ({
-  pending,
-  received,
-}: {
-  pending: number;
-  received: number;
-}) => {
+export const RequestCard = () => {
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [pendingRequested, setPendingRequested] = useState(0);
+  const [receivedRequested, setReceivedRequested] = useState(0);
 
-  const pendingAmount = (pending / 100).toFixed(2);
-  const receivedAmount = (received / 100).toFixed(2);
-  const totalRequested = ((pending + received) / 100).toFixed(2);
+  const fetchRequestedStats = async () => {
+    try {
+      const res = await fetch("/api/amount-requested");
+      const data = await res.json();
+      setPendingRequested(data.pendingRequested);
+      setReceivedRequested(data.receivedRequested);
+    } catch (err) {
+      console.error("Error fetching requested amounts:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequestedStats(); // initial load
+    const interval = setInterval(fetchRequestedStats, 3000); // poll every 3s
+    return () => clearInterval(interval);
+  }, []);
+
+  const pendingAmount = (pendingRequested / 100).toFixed(2);
+  const receivedAmount = (receivedRequested / 100).toFixed(2);
+  const totalRequested = ((pendingRequested + receivedRequested) / 100).toFixed(2);
 
   return (
     <>

@@ -1,23 +1,37 @@
 "use client";
 import { Wallet, X } from "lucide-react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { TransferCard } from "./Transferv2";
 import {TransferForm} from "./TransferForm"
 import { DepositCard } from "./DepositCardv2";
 
-export const BalanceCard = ({
-  amount,
-  locked,
-}: {
-  amount: number;
-  locked: number;
-}) => {
+
+export const BalanceCard = () => {
   const [showTransfer, setShowTransfer] = useState(false);
   const [showDeposit, setShowDeposit] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [locked, setLocked] = useState(0);
 
   const unlocked = (amount / 100).toFixed(2);
   const lockedAmount = (locked / 100).toFixed(2);
   const total = ((amount + locked) / 100).toFixed(2);
+
+  const fetchBalance = async () => {
+    try {
+      const res = await fetch("/api/balance");
+      const data = await res.json();
+      setAmount(data.amount);
+      setLocked(data.locked);
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance(); // initial fetch
+    const interval = setInterval(fetchBalance, 3000); // refetch every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

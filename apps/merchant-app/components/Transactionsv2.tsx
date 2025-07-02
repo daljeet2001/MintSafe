@@ -1,14 +1,32 @@
-import { ArrowDownRight, ArrowUpRight, IndianRupee } from "lucide-react";
+"use client"
 
-export const Transactions = ({transactions}
-:{
-  transactions:{
-    time:Date,
-    amount:number,
-    status:string,
-    provider:string,
-  }[]
-}) => {
+import { ArrowDownRight, ArrowUpRight, IndianRupee } from "lucide-react";
+import {useState,useEffect} from "react"
+type Transaction = {
+  time: string | Date;
+  amount: number;
+  status: string;
+  provider: string;
+};
+export const Transactions = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await fetch("/api/merchant-transactions");
+      const data = await res.json();
+      setTransactions(data);
+    } catch (err) {
+      console.error("Failed to fetch transactions:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions(); // initial load
+    const interval = setInterval(fetchTransactions, 3000); // poll every 3s
+    return () => clearInterval(interval);
+  }, []);
+
   if(!transactions.length){
     return (
       <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[476px] flex items-center justify-center">
@@ -64,7 +82,7 @@ export const Transactions = ({transactions}
                     </span>
                   </p>
                   <p className="text-xs text-gray-500">
-                    {tx.time.toLocaleDateString()}
+                    {new Date(tx.time).toLocaleDateString()}
                   </p>
                 </div>
               </div>

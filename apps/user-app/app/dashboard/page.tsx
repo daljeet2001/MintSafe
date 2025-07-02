@@ -12,86 +12,10 @@ import { WelcomeCard } from "../../components/WelcomeCard";
 import { Testimonials } from "../../components/Testimonials";
 import {RequestedTransactionsCard} from "../../components/RequestedTransactionsCard";
 
-
-async function getBalance() {
-  const session = await getServerSession(authOptions);
-  // console.log("Session:", session);
-  const balance = await prisma.balance.findFirst({
-    where: { userId: Number(session?.user?.id) },
-  });
-  return {
-    amount: balance?.amount || 0,
-    locked: balance?.locked || 0,
-  };
-}
-export async function getUserPhoneNumber() {
-  const session = await getServerSession(authOptions);
-  const user = await prisma.user.findUnique({
-    where: { id: Number(session?.user?.id) },
-    select: { number: true },
-  });
-
-  return user?.number || "Unknown";
-}
-
-
-async function getP2PTransactions() {
-  const session = await getServerSession(authOptions);
-
-  const userWithTransfers = await prisma.user.findUnique({
-    where: { id: Number(session?.user?.id) },
-    include: {
-      sentTransfers: true,
-      receivedTransfers: true,
-    },
-  });
-
-  const sent = userWithTransfers?.sentTransfers || [];
-  const received = userWithTransfers?.receivedTransfers || [];
-
-  return [
-    ...sent.map((t) => ({
-      amount: t.amount,
-      time: t.timestamp,
-      provider: "P2P (Sent)",
-      status: "Success",
-    })),
-    ...received.map((t) => ({
-      amount: t.amount,
-      time: t.timestamp,
-      provider: "P2P (Received)",
-      status: "Success",
-    })),
-  ];
-}
-
-async function getOnRampTransactions() {
-  const session = await getServerSession(authOptions);
-  const txns = await prisma.onRampTransaction.findMany({
-    where: {
-      userId: Number(session?.user?.id),
-    },
-  });
-
-  return txns.map((t) => ({
-    time: t.startTime,
-    amount: t.amount,
-    status: t.status,
-    provider: t.provider,
-  }));
-}
-
 export default async function DashboardPage() {
-  const balance = await getBalance();
-  const userPhone = await getUserPhoneNumber();
-  const [onramp, p2p] = await Promise.all([
-    getOnRampTransactions(),
-    getP2PTransactions(),
-  ]);
-
-  const allTransactions = [...onramp, ...p2p].sort(
-    (a, b) => b.time.getTime() - a.time.getTime()
-  );
+  const session = await getServerSession(authOptions);
+  // console.log(session)
+  if (!session?.user?.id) redirect("/signin");
 
   return (
     <div className="min-h-screen bg-[#F7F7F7] pb-20">
@@ -101,7 +25,7 @@ export default async function DashboardPage() {
         {/* Left Column - Welcome and Balance */}
         <div className="flex flex-col gap-6">
             {/* RequestCard on right */}
-            <BalanceCard amount={balance.amount} locked={balance.locked} />       
+            <BalanceCard />       
             <div className="w-full lg:max-w-sm lg:min-w-[280px]">
               <RequestedTransactionsCard />
             </div>
@@ -114,7 +38,7 @@ export default async function DashboardPage() {
           <div className="flex flex-col lg:flex-row">
             {/* Transactions take more space */}
             <div className="flex-1">
-              <Transactions transactions={allTransactions} />
+              <Transactions/>
             </div>
 
           

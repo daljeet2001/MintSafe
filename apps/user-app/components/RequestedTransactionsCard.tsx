@@ -19,19 +19,24 @@ export const RequestedTransactionsCard = () => {
   const [errors, setErrors] = useState<Record<number, string>>({});
 
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const res = await fetch("/api/requested-transactions");
-        const data = await res.json();
-        setTransactions(data);
-      } catch (error) {
-        console.error("Failed to load transactions:", error);
-      }
-    };
+useEffect(() => {
+  const fetchTransactions = async () => {
+    try {
+      const res = await fetch("/api/requested-transactions");
+      const data = await res.json();
+      setTransactions(data);
+    } catch (error) {
+      console.error("Failed to load transactions:", error);
+    }
+  };
 
-    fetchTransactions();
-  }, []);
+  fetchTransactions(); // Initial fetch
+
+  const interval = setInterval(fetchTransactions, 3000); // Refetch every 3 seconds
+
+  return () => clearInterval(interval); // Cleanup on unmount
+}, []);
+
 
  const handleApprove = async (id: number) => {
   try {
@@ -62,10 +67,33 @@ setTransactions((prev) => prev.filter((t) => t.id !== id));
 };
 
 
-  const handleDecline = (id: number) => {
-    setTransactions((prev) => prev.filter((t) => t.id !== id));
+  const handleDecline = async (id: number) => {
+  try {
+    const res = await fetch("/api/decline-request", {
+      method: "POST",
+      body: JSON.stringify({ requestId: id }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setErrors((prev) => ({ ...prev, [id]: data.error || "Failed to decline" }));
+      return;
+    }
+
+setTransactions((prev) => prev.filter((t) => t.id !== id));
+    setErrors((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+
     console.log("Declined:", id);
-  };
+  } catch (err) {
+    console.error("Decline error:", err);
+    setErrors((prev) => ({ ...prev, [id]: "Unexpected error" }));
+  }
+};
 
   return (
     <div className="bg-white p-4 rounded-xl shadow-md w-full max-w-md h-[228px]">

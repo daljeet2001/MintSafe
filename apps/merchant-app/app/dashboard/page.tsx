@@ -19,95 +19,13 @@ import {Transactions} from "../../components/Transactionsv2"
 import {WelcomeCard} from "../../components/WelcomeCard"
 import {RequestCard} from "../../components/RequestCard"
 
-async function getBalance() {
-  const session = await getServerSession(authOptions);
-  // console.log("Session:", session);
-  const balance = await prisma.merchantBalance.findFirst({
-    where: { merchantId: Number(session?.merchant?.id) },
-  });
-  return {
-    amount: balance?.amount || 0,
-    locked: balance?.locked || 0,
-  };
-}
-
-async function getRequestedTransactions() {
-  const session = await getServerSession(authOptions);
-
-  const txns = await prisma.requestedTransactions.findMany({
-    where: {
-      merchantId: Number(session?.merchant?.id),
-    },
-  });
-
-  let totalRequested = 0;
-  let pendingRequested = 0;
-  let receivedRequested = 0;
-
-  const transactions = txns.map((t) => {
-    totalRequested += t.amount;
-
-    if (t.status.toLowerCase() === "processing") {
-      pendingRequested += t.amount;
-    } else if (t.status.toLowerCase() === "success") {
-      receivedRequested += t.amount;
-    }
-
-    return {
-      time: t.startTime,
-      amount: t.amount,
-      status: t.status,
-      provider: t.To,
-    };
-  });
-
-  return {
-    transactions,
-    totalRequested,
-    pendingRequested,
-    receivedRequested,
-  };
-}
-
-
-async function getDownRampTransactions() {
-  const session = await getServerSession(authOptions);
-  const txns = await prisma.downRampTransaction.findMany({
-    where: {
-      merchantId: Number(session?.merchant?.id),
-    },
-  });
-
-  return txns.map((t) => ({
-    time: t.startTime,
-    amount: t.amount,
-    status: t.status,
-    provider: t.provider,
-  }));
-}
-
-
 
 
 const page = async () => {
 
   const session = await getServerSession(authOptions);
   // console.log(session)
-  if (!session?.merchant) redirect("/signin");
-  const result=await getRequestedTransactions()
-  const reqTransactions=result.transactions
-  const recieved=result.receivedRequested
-  const pending=result.pendingRequested
-  const balance=await getBalance();
-
-  const [onramp] = await Promise.all([
-      getDownRampTransactions(),
-    ]);
-
-  const allTransactions = [...onramp, ...reqTransactions].sort(
-      (a, b) => b.time.getTime() - a.time.getTime()
-    );
-
+  if (!session?.merchant?.id) redirect("/signin");
 
   return (
   <div className="bg-[#F6F8FF] text-black min-h-screen pb-30">
@@ -118,9 +36,9 @@ const page = async () => {
       <div className="flex flex-col gap-6">
           {/* RequestCard on right */}
           <div className="w-full lg:max-w-sm lg:min-w-[280px]">
-            <RequestCard pending={pending} received={recieved} />
+            <RequestCard />
           </div>
-        <BalanceCard amount={balance.amount} locked={balance.locked} />
+        <BalanceCard/>
       </div>
 
       {/* Right Section - 2/3 width */}
@@ -128,7 +46,7 @@ const page = async () => {
         <div className="flex flex-col lg:flex-row">
           {/* Transactions take more space */}
           <div className="flex-1">
-            <Transactions transactions={allTransactions} />
+            <Transactions />
           </div>
 
         

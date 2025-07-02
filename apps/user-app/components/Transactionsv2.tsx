@@ -1,14 +1,33 @@
+"use client"
+import {useState,useEffect} from "react"
 import { ArrowDownRight, ArrowUpRight, IndianRupee } from "lucide-react";
+type Transaction = {
+  amount: number;
+  time:  Date;
+  provider: string;
+  status: string;
+};
 
-export const Transactions = ({transactions}
-:{
-  transactions:{
-    time:Date,
-    amount:number,
-    status:string,
-    provider:string,
-  }[]
-}) => {
+
+export const Transactions = () => {
+   const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await fetch("/api/transactions");
+      const data = await res.json();
+      setTransactions(data);
+    } catch (err) {
+      console.error("Failed to load transactions:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions(); // initial
+    const interval = setInterval(fetchTransactions, 3000); // poll every 3s
+    return () => clearInterval(interval);
+  }, []);
+
   if(!transactions.length){
     return (
       <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[476px] flex items-center justify-center">
@@ -27,6 +46,7 @@ export const Transactions = ({transactions}
           const isProcessing = tx.status.toLowerCase() === "processing";
           const isP2PSent = tx.provider === "P2P (Sent)";
           const amount = (tx.amount / 100).toFixed(2);
+          const Requested=tx.provider.toLowerCase()==="requested";
 
           let amountClass = "text-green-600";
           let icon = <ArrowDownRight className="w-5 h-5 text-white" />;
@@ -45,6 +65,11 @@ export const Transactions = ({transactions}
             icon = <ArrowUpRight className="w-5 h-5 text-white" />;
             iconBg = "bg-red-500";
           }
+          else if(Requested){
+            amountClass="text-red-600"
+            icon = <ArrowUpRight className="w-5 h-5 text-white" />;
+            iconBg="bg-red-500"
+          }
 
           return (
             <li
@@ -60,9 +85,10 @@ export const Transactions = ({transactions}
                       {tx.status}
                     </span>
                   </p>
-                  <p className="text-xs text-gray-500">
-                    {tx.time.toLocaleDateString()}
-                  </p>
+               <p className="text-xs text-gray-500">
+               {new Date(tx.time).toLocaleDateString()}
+               </p>
+
                 </div>
               </div>
 
