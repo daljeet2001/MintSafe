@@ -10,6 +10,7 @@ import { SupportBanner } from "../../components/SupportBanner";
 import { BusinessSection } from "../../components/BusinessSection";
 import { WelcomeCard } from "../../components/WelcomeCard";
 import { Testimonials } from "../../components/Testimonials";
+import {RequestedTransactionsCard} from "../../components/RequestedTransactionsCard";
 
 
 async function getBalance() {
@@ -95,19 +96,32 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#F7F7F7] pb-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 space-y-8">
-        {/* Top Section - Welcome and Financial Overview */}
-     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  {/* Left Column - Welcome and Balance */}
-  <div className="space-y-6">
-    <WelcomeCard phone={userPhone}/>
-    <BalanceCard amount={balance.amount} locked={balance.locked} />
-  </div>
+            {/* Top Section - Welcome and Financial Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Welcome and Balance */}
+        <div className="flex flex-col gap-6">
+            {/* RequestCard on right */}
+            <BalanceCard amount={balance.amount} locked={balance.locked} />       
+            <div className="w-full lg:max-w-sm lg:min-w-[280px]">
+              <RequestedTransactionsCard />
+            </div>
+            
+         
+        </div>
 
-  {/* Right Section - Transactions spanning 2 cols */}
-  <div className="lg:col-span-2">
-    <Transactions transactions={allTransactions} />
-  </div>
-</div>
+        {/* Right Section - 2/3 width */}
+        <div className="lg:col-span-2 flex flex-col">
+          <div className="flex flex-col lg:flex-row">
+            {/* Transactions take more space */}
+            <div className="flex-1">
+              <Transactions transactions={allTransactions} />
+            </div>
+
+          
+          </div>
+        </div>
+      </div>
+  
 
 
         {/* Testimonials Section */}

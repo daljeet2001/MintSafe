@@ -23,28 +23,31 @@ export const Transactions = ({transactions}
       {/* Scrollable container */}
       <ul className="space-y-4 overflow-y-auto pr-2 flex-1">
         {transactions.map((tx,i) => {
-          const isFailed = tx.status.toLowerCase() === "failure";
-          const isProcessing = tx.status.toLowerCase() === "processing";
-          const isP2PSent = tx.provider === "P2P (Sent)";
-          const amount = (tx.amount / 100).toFixed(2);
+        const isFailed = tx.status.toLowerCase() === "failure";
+        const isProcessing = tx.status.toLowerCase() === "processing";
+        const isOutgoing = ["hdfc bank", "axis bank", "yes bank"]
+          .some(p => tx.provider.toLowerCase().includes(p));
+        const amount = (tx.amount / 100).toFixed(2);
 
-          let amountClass = "text-green-600";
-          let icon = <ArrowDownRight className="w-5 h-5 text-white" />;
-          let iconBg = "bg-[#14BA6C]";
+        let icon = isOutgoing
+          ? <ArrowUpRight className="w-5 h-5 text-white" />
+          : <ArrowDownRight className="w-5 h-5 text-white" />;
 
-          if (isFailed) {
-            amountClass = "text-red-600";
-            icon = <ArrowUpRight className="w-5 h-5 text-white" />;
-            iconBg = "bg-red-500";
-          } else if (isProcessing) {
-            amountClass = "text-amber-500 animate-pulse";
-            icon = <ArrowDownRight className="w-5 h-5 text-white" />;
-            iconBg = "bg-amber-500";
-          } else if (isP2PSent) {
-            amountClass = "text-red-600";
-            icon = <ArrowUpRight className="w-5 h-5 text-white" />;
-            iconBg = "bg-red-500";
-          }
+        let amountClass = "text-green-600";
+        let iconBg = "bg-[#14BA6C]";
+
+        if (isFailed) {
+          amountClass = "text-red-600";
+          iconBg = "bg-red-500";
+        } else if (isProcessing) {
+          amountClass = "text-amber-500 animate-pulse";
+          iconBg = "bg-amber-500";
+        } else if (isOutgoing) {
+          // Successful outgoing tx like downramp or p2p sent
+          amountClass = "text-red-600";
+          iconBg = "bg-red-500";
+        }
+ 
 
           return (
             <li

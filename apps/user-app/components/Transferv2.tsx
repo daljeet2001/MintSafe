@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { CheckCircle, Phone, Send, XCircle } from "lucide-react";
+import { CheckCircle, Phone, Send, XCircle,BadgeCheck,BadgeX } from "lucide-react";
 import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
 
 export const TransferCard = ({balance,available}:{balance:string,available:string} )=> {
@@ -36,8 +36,8 @@ export const TransferCard = ({balance,available}:{balance:string,available:strin
   };
 
   const getButtonIcon = () => {
-    if (status === "success") return <CheckCircle className="w-4 h-4" />;
-    if (status === "error") return <XCircle className="w-4 h-4" />;
+    if (status === "success") return <BadgeCheck className="w-4 h-4" />;
+    if (status === "error") return <BadgeX className="w-4 h-4" />;
     return <Send className="w-4 h-4" />;
   };
 

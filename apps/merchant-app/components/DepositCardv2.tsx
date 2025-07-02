@@ -1,7 +1,8 @@
 "use client";
-
+//Withdraw card
 import { Building, Plus, Minus, ChevronDown } from "lucide-react";
 import { useState, useRef } from "react";
+import {createDownRampTransaction} from "../app/lib/actions/DownRampTransaction"
 
 
 const SUPPORTED_BANKS = [
@@ -119,9 +120,8 @@ export const DepositCard = () => {
       <button className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold text-sm rounded-full  transition"
           onClick={async () => {
             const provider = SUPPORTED_BANKS[selectedBank]!;
-         
-            //   await createOnRampTransaction(provider.name, amount/100);
-              window.location.href = provider.redirectUrl || "";
+            await createDownRampTransaction(provider.name, amount/100);
+            window.location.href = provider.redirectUrl || "";
             }}>
         Confirm Top Down
       </button>

@@ -11,13 +11,13 @@ export const Transactions = ({transactions}
 }) => {
   if(!transactions.length){
     return (
-      <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[348px] flex items-center justify-center">
+      <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[476px] flex items-center justify-center">
         <p className="text-sm text-gray-500">No recent transactions</p>
       </div>
     );
   }
   return (
-    <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[348px] flex flex-col">
+    <div className="bg-white text-[#1E1E1F] p-6 rounded-2xl shadow-lg h-[476px] flex flex-col">
       <h2 className="text-lg font-semibold mb-4">Recent Transactions</h2>
       
       {/* Scrollable container */}

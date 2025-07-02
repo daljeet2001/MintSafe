@@ -1,8 +1,17 @@
 "use client";
-
-import { User as UserIcon, ChevronDown, CheckCircle,Check,BadgeCheck,BadgeX, XCircle, Send } from "lucide-react";
+import { useSession } from "next-auth/react";
+import {
+  User as UserIcon,
+  ChevronDown,
+  CheckCircle,
+  Check,
+  BadgeCheck,
+  BadgeX,
+  XCircle,
+  Send,
+} from "lucide-react";
 import { useState, useEffect } from "react";
-import { RequestTransaction } from "../app/lib/actions/CreateRequestTransaction";
+import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
 
 interface User {
   id: number;
@@ -11,7 +20,13 @@ interface User {
   number: string;
 }
 
-export const RequestForm = () => {
+export const TransferForm = ({
+  balance,
+  available,
+}: {
+  balance: string;
+  available: string;
+}) => {
   const [amount, setAmount] = useState(1000); // in paise
   const [selectedUser, setSelectedUser] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -38,7 +53,7 @@ export const RequestForm = () => {
 
     try {
       setStatus("idle");
-      const res = await RequestTransaction(user.number, amount/100);
+      const res = await p2pTransfer(user.number, amount);
       console.log("Request result:", res);
       setStatus("success");
     } catch (err) {
@@ -50,7 +65,7 @@ export const RequestForm = () => {
   const getButtonStyle = () => {
     if (status === "success") return "bg-green-600 hover:bg-green-700";
     if (status === "error") return "bg-red-600 hover:bg-red-700";
-    return "bg-indigo-600 hover:bg-indigo-700";
+    return "bg-[#14BA6C] hover:bg-[#12a35e]";
   };
 
   const getButtonIcon = () => {
@@ -60,18 +75,28 @@ export const RequestForm = () => {
   };
 
   const getButtonText = () => {
-    if (status === "success") return "Request Sent";
-    if (status === "error") return "Request Failed";
-    return "Send Request";
+    if (status === "success") return "Transfer Succesful";
+    if (status === "error") return "Transfer Failed";
+    return "Send Money";
   };
+
+  const isExceeding = amount > Number(available) * 100;
+  const existingUser=useSession().data?.user!
+//   console.log(existingUser)
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-xl w-full max-w-md space-y-6">
       <h2 className="text-xl font-semibold text-[#1E1E1F]">Request Money</h2>
 
-      <p className="text-sm text-gray-600">
-        Select user and enter amount you want to request
-      </p>
+      {/* Wallet info */}
+      <div className="bg-gray-100 rounded-xl p-4 space-y-2 shadow-inner">
+        <div className="text-sm font-semibold text-gray-800">MintSafe Wallet</div>
+        <div className="text-xs text-gray-500">₹{balance}</div>
+
+        <div className="text-xs text-gray-400">
+          Available: ₹{Number(available).toLocaleString("en-IN")}
+        </div>
+      </div>
 
       {/* Amount Input */}
       <div className="flex justify-between items-center bg-gray-100 py-4 px-6 rounded-xl text-lg font-semibold text-[#1E1E1F] shadow-inner">
@@ -85,19 +110,25 @@ export const RequestForm = () => {
             const val = parseFloat(e.target.value);
             if (!isNaN(val)) setAmount(Math.round(val * 100));
           }}
-          className="text-xl font-bold bg-transparent outline-none text-right w-28"
+          className={`text-xl font-bold bg-transparent outline-none text-right w-28 ${
+            isExceeding ? "text-red-500" : ""
+          }`}
         />
       </div>
+      {isExceeding && (
+        <p className="text-xs text-red-500 pt-1">Insufficient balance</p>
+      )}
 
       {/* User Select */}
       <div>
         <div className="flex justify-between items-center text-sm font-medium text-[#1E1E1F] mb-2">
           <span>Select user</span>
-          <button className="text-indigo-600 hover:underline text-sm">Invite new</button>
+          <button className="text-[#14BA6C] hover:underline text-sm">Invite new</button>
         </div>
 
         <div className="bg-gray-50 rounded-xl shadow-sm">
-          {users.map((user, idx) => (
+          {users.filter((user) => user.email !== existingUser.email) 
+          .map((user, idx) => (
             <div
               key={user.number}
               className={`flex items-center justify-between px-4 py-3 border-b last:border-none cursor-pointer rounded-xl ${
@@ -106,9 +137,11 @@ export const RequestForm = () => {
               onClick={() => handleUserSelect(idx)}
             >
               <div className="flex items-center gap-3">
-                <UserIcon className="w-4 h-4 text-indigo-600" />
+                <UserIcon className="w-4 h-4 text-[#14BA6C]" />
                 <div className="text-sm">
-                  <div className="font-medium text-[#1E1E1F]">{user.name || "anonymous"}</div>
+                  <div className="font-medium text-[#1E1E1F]">
+                    {user.name || "anonymous"}
+                  </div>
                   <div className="text-xs text-gray-500">{user.number}</div>
                 </div>
               </div>
@@ -127,9 +160,9 @@ export const RequestForm = () => {
       >
         {getButtonIcon()}
         {getButtonText()}
-        
       </button>
     </div>
   );
 };
+
 

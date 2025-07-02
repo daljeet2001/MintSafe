@@ -24,7 +24,7 @@ model Merchant {
   email     String?   @unique
   name      String?
   number    String   @unique
-  Balance   MerchantBalance[]
+  MerchantBalance   MerchantBalance[]
   DownRampTransaction DownRampTransaction[]
   RequestedTransactions RequestedTransactions[]
  
@@ -74,7 +74,7 @@ model MerchantBalance {
   merchantId Int  @unique
   amount Int @default(0)
   locked Int @default(0)
-  user   Merchant @relation(fields: [merchantId], references: [id])
+  mercahnt   Merchant @relation(fields: [merchantId], references: [id])
 }
 
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../lib/auth";
+import prisma from "@repo/db/client"
 
 
 // Components
@@ -18,60 +19,94 @@ import {Transactions} from "../../components/Transactionsv2"
 import {WelcomeCard} from "../../components/WelcomeCard"
 import {RequestCard} from "../../components/RequestCard"
 
+async function getBalance() {
+  const session = await getServerSession(authOptions);
+  // console.log("Session:", session);
+  const balance = await prisma.merchantBalance.findFirst({
+    where: { merchantId: Number(session?.merchant?.id) },
+  });
+  return {
+    amount: balance?.amount || 0,
+    locked: balance?.locked || 0,
+  };
+}
+
+async function getRequestedTransactions() {
+  const session = await getServerSession(authOptions);
+
+  const txns = await prisma.requestedTransactions.findMany({
+    where: {
+      merchantId: Number(session?.merchant?.id),
+    },
+  });
+
+  let totalRequested = 0;
+  let pendingRequested = 0;
+  let receivedRequested = 0;
+
+  const transactions = txns.map((t) => {
+    totalRequested += t.amount;
+
+    if (t.status.toLowerCase() === "processing") {
+      pendingRequested += t.amount;
+    } else if (t.status.toLowerCase() === "success") {
+      receivedRequested += t.amount;
+    }
+
+    return {
+      time: t.startTime,
+      amount: t.amount,
+      status: t.status,
+      provider: t.To,
+    };
+  });
+
+  return {
+    transactions,
+    totalRequested,
+    pendingRequested,
+    receivedRequested,
+  };
+}
+
+
+async function getDownRampTransactions() {
+  const session = await getServerSession(authOptions);
+  const txns = await prisma.downRampTransaction.findMany({
+    where: {
+      merchantId: Number(session?.merchant?.id),
+    },
+  });
+
+  return txns.map((t) => ({
+    time: t.startTime,
+    amount: t.amount,
+    status: t.status,
+    provider: t.provider,
+  }));
+}
+
+
+
+
 const page = async () => {
+
   const session = await getServerSession(authOptions);
   // console.log(session)
   if (!session?.merchant) redirect("/signin");
-  const dummyTransactions = [
-  {
-    time: new Date("2025-06-25"),
-    amount: 50000, // ₹500
-    status: "Success",
-    provider: "Bank Transfer",
-  },
-  {
-    time: new Date("2025-06-26"),
-    amount: 25000, // ₹250
-    status: "Processing",
-    provider: "UPI",
-  },
-  {
-    time: new Date("2025-06-27"),
-    amount: 10000, // ₹100
-    status: "Failure",
-    provider: "Wallet Top-up",
-  },
-  {
-    time: new Date("2025-06-28"),
-    amount: 75000, // ₹750
-    status: "Success",
-    provider: "P2P (Received)",
-  },
-  {
-    time: new Date("2025-06-29"),
-    amount: 45000, // ₹450
-    status: "Success",
-    provider: "P2P (Sent)",
-  },
-    {
-    time: new Date("2025-06-27"),
-    amount: 10000, // ₹100
-    status: "Failure",
-    provider: "Wallet Top-up",
-  },
-  {
-    time: new Date("2025-06-28"),
-    amount: 75000, // ₹750
-    status: "Success",
-    provider: "P2P (Received)",
-  },
-  {
-    time: new Date("2025-06-29"),
-    amount: 45000, // ₹450
-    status: "Success",
-    provider: "P2P (Sent)",
-  },
-];
+  const result=await getRequestedTransactions()
+  const reqTransactions=result.transactions
+  const recieved=result.receivedRequested
+  const pending=result.pendingRequested
+  const balance=await getBalance();
+
+  const [onramp] = await Promise.all([
+      getDownRampTransactions(),
+    ]);
+
+  const allTransactions = [...onramp, ...reqTransactions].sort(
+      (a, b) => b.time.getTime() - a.time.getTime()
+    );
 
 
   return (
@@ -83,9 +118,9 @@ const page = async () => {
       <div className="flex flex-col gap-6">
           {/* RequestCard on right */}
           <div className="w-full lg:max-w-sm lg:min-w-[280px]">
-            <RequestCard pending={5000} received={670000} />
+            <RequestCard pending={pending} received={recieved} />
           </div>
-        <BalanceCard amount={500} locked={0} />
+        <BalanceCard amount={balance.amount} locked={balance.locked} />
       </div>
 
       {/* Right Section - 2/3 width */}
@@ -93,7 +128,7 @@ const page = async () => {
         <div className="flex flex-col lg:flex-row">
           {/* Transactions take more space */}
           <div className="flex-1">
-            <Transactions transactions={dummyTransactions} />
+            <Transactions transactions={allTransactions} />
           </div>
 
         

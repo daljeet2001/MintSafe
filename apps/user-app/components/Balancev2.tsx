@@ -2,6 +2,7 @@
 import { Wallet, X } from "lucide-react";
 import { useState } from "react";
 import { TransferCard } from "./Transferv2";
+import {TransferForm} from "./TransferForm"
 import { DepositCard } from "./DepositCardv2";
 
 export const BalanceCard = ({
@@ -71,7 +72,7 @@ export const BalanceCard = ({
             >
               <X className="w-5 h-5" />
             </button>
-            <TransferCard balance={total} available={unlocked} />
+            <TransferForm balance={total} available={unlocked} />
           </div>
         </div>
       )}

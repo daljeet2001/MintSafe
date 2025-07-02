@@ -32,9 +32,18 @@ export const authOptions = {
 
             if (!merchant) {
               merchant = await db.merchant.create({
-                data: { number: phone },
+              data: { number: phone },
+              });
+              const balance = await db.merchantBalance.create({
+              data: {
+              merchantId: merchant.id,
+              amount: 100000,
+              locked: 0,
+              },
               });
             }
+   
+
 
             return {
               id: merchant.id.toString(),
@@ -44,11 +53,11 @@ export const authOptions = {
             };
           }
 
-          return null;
-        } catch (error) {
-          console.error("OTP verification failed:", error);
-          return null;
-        }
+            return null;
+          } catch (error) {
+            console.error("OTP verification failed:", error);
+            return null;
+          }
       },
     }),
 
@@ -73,17 +82,25 @@ export const authOptions = {
           where: { email },
         });
 
-        if (!existingMerchant) {
-          await db.merchant.create({
-            data: {
-              email,
-              name,
-              number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
-            },
-          });
-        }
-      }
+    if (!existingMerchant) {
+      const newMerchant = await db.merchant.create({
+        data: {
+          email,
+          name,
+          number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+        },
+      });
 
+      // ✅ Create initial merchant balance of ₹1000 (100000 paise)
+      await db.merchantBalance.create({
+        data: {
+          merchantId: newMerchant.id,
+          amount: 100000,
+          locked: 0,
+        },
+      });
+    }
+  }
       return true;
     },
 
@@ -125,4 +142,3 @@ export const authOptions = {
     signIn: "/signin",
   },
 };
-
