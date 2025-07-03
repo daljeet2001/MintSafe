@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "../lib/auth";
 import prisma from "@repo/db/client"
 
-
+console.log("hello test1")
 // Components
 import AnimatedCounters from '../../components/AnimatedCounters';
 import Hero from "../../components/Hero";
