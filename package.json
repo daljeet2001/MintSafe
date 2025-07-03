@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "@marsidev/react-turnstile": "^1.1.0",
+    "@prisma/client": "^6.11.0",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.35.0",
     "framer-motion": "^12.19.2",

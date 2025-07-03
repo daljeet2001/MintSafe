@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client";
 
-export async function GET(req: Request) {
+export async function GET(_: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -41,13 +41,13 @@ export async function GET(req: Request) {
   const received = user.receivedTransfers || [];
 
   const p2p = [
-    ...sent.map((t) => ({
+    ...sent.map((t: { amount: any; timestamp: any; }) => ({
       amount: t.amount,
       time: t.timestamp,
       provider: "P2P (Sent)",
       status: "Success",
     })),
-    ...received.map((t) => ({
+    ...received.map((t: { amount: any; timestamp: any; }) => ({
       amount: t.amount,
       time: t.timestamp,
       provider: "P2P (Received)",
@@ -56,7 +56,7 @@ export async function GET(req: Request) {
   ];
 
   // OnRamp
-  const onramp = onrampTxns.map((t) => ({
+  const onramp = onrampTxns.map((t: { amount: any; startTime: any; provider: any; status: any; }) => ({
     amount: t.amount,
     time: t.startTime,
     provider: t.provider,
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
   }));
 
   // Requested Transactions (Success → To = user's number)
-  const requested = requestedTxns.map((t) => ({
+  const requested = requestedTxns.map((t: { amount: any; startTime: any; status: any; }) => ({
     amount: t.amount,
     time: t.startTime,
     provider: "Requested",

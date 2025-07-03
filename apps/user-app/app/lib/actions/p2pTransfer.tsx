@@ -68,34 +68,51 @@ export async function p2pTransfer(to: string, amount: number) {
       return { message: "User not found" };
     }
 
-    await prisma.$transaction(async (tx) => {
+    interface User {
+      id: number;
+      number: string;
+    }
+
+    interface Balance {
+      userId: number;
+      amount: number;
+    }
+
+    interface P2PTransferData {
+      fromUserId: number;
+      toUserId: number;
+      amount: number;
+      timestamp: Date;
+    }
+
+    await prisma.$transaction(async (tx: typeof prisma) => {
       await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
 
-      const fromBalance = await tx.balance.findUnique({
-        where: { userId: Number(from) },
+      const fromBalance: Balance | null = await tx.balance.findUnique({
+      where: { userId: Number(from) },
       });
 
       if (!fromBalance || fromBalance.amount < amount) {
-        throw new Error("Insufficient funds");
+      throw new Error("Insufficient funds");
       }
 
       await tx.balance.update({
-        where: { userId: Number(from) },
-        data: { amount: { decrement: amount } },
+      where: { userId: Number(from) },
+      data: { amount: { decrement: amount } },
       });
 
       await tx.balance.update({
-        where: { userId: toUser.id },
-        data: { amount: { increment: amount } },
+      where: { userId: (toUser as User).id },
+      data: { amount: { increment: amount } },
       });
 
       await tx.p2pTransfer.create({
-        data: {
-          fromUserId: from,
-          toUserId: toUser.id,
-          amount,
-          timestamp: new Date(),
-        },
+      data: {
+        fromUserId: from,
+        toUserId: (toUser as User).id,
+        amount,
+        timestamp: new Date(),
+      } as P2PTransferData,
       });
     });
 

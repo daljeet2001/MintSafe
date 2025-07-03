@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import {Store} from "lucide-react"
+// import { Store } from "lucide-react";
+import Image from "next/image";
 
 export default function SignInPage() {
   const [step, setStep] = useState<"phone" | "otp">("phone");
@@ -16,7 +17,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (step === "otp" && resendTimer > 0) {
-      const timer = setInterval(() => setResendTimer(t => t - 1), 1000);
+      const timer = setInterval(() => setResendTimer((t) => t - 1), 1000);
       return () => clearInterval(timer);
     }
   }, [step, resendTimer]);
@@ -69,7 +70,7 @@ export default function SignInPage() {
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       {/* Left side image */}
       <div className="relative hidden md:block">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1583147986952-8bccaed15c1e?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Promo"
           className="h-full w-full object-cover"
@@ -79,10 +80,9 @@ export default function SignInPage() {
       {/* Right side */}
       <div className="flex items-center justify-center px-6 py-10 bg-white">
         <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-sm">
-       
-        <h2 className="text-base font-medium mb-4 text-gray-800">Welcome to <b>MintSafe</b></h2>
-  
-       
+          <h2 className="text-base font-medium mb-4 text-gray-800">
+            Welcome to <b>MintSafe</b>
+          </h2>
 
           <h1 className="text-2xl font-bold mb-6 text-gray-900">
             {step === "phone"
@@ -105,11 +105,13 @@ export default function SignInPage() {
                 disabled={loading}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md text-sm mb-3"
               >
-              Send OTP
+                Send OTP
               </button>
               <div className="flex items-center my-4">
                 <div className="flex-grow h-px bg-gray-300" />
-                <span className="mx-2 text-gray-500 text-sm font-medium">OR</span>
+                <span className="mx-2 text-gray-500 text-sm font-medium">
+                  OR
+                </span>
                 <div className="flex-grow h-px bg-gray-300" />
               </div>
               <button
@@ -165,9 +167,16 @@ export default function SignInPage() {
               </div>
 
               <div className="text-sm text-gray-400 text-right mb-4">
-                {resendTimer > 0
-                  ? `Resend OTP in ${resendTimer}s`
-                  : <button onClick={sendOtp} className="text-blue-600 hover:underline">Resend OTP</button>}
+                {resendTimer > 0 ? (
+                  `Resend OTP in ${resendTimer}s`
+                ) : (
+                  <button
+                    onClick={sendOtp}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Resend OTP
+                  </button>
+                )}
               </div>
 
               <button
@@ -175,12 +184,15 @@ export default function SignInPage() {
                 disabled={loading}
                 className="w-full bg-[#eef3ff] text-blue-700 py-2 rounded-md font-medium text-sm hover:bg-[#dceaff] transition"
               >
-               Verify
+                Verify
               </button>
 
               <p className="mt-6 text-xs text-gray-500 text-center">
                 Want to change your signup mode?{" "}
-                <a href="#" className="text-blue-600 hover:underline font-medium">
+                <a
+                  href="#"
+                  className="text-blue-600 hover:underline font-medium"
+                >
                   Use another method
                 </a>
               </p>
@@ -191,4 +203,3 @@ export default function SignInPage() {
     </div>
   );
 }
-

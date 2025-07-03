@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import {Store} from "lucide-react"
+// import {Store} from "lucide-react"
 
 export default function SignInPage() {
   const [step, setStep] = useState<"phone" | "otp">("phone");

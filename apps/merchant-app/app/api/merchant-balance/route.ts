@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client"
 
-export async function GET(req: Request) {
+export async function GET(_: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session?.merchant?.id) {

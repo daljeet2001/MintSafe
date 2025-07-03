@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { AppbarClient } from "./AppbarClient";
-import { BusinessCTA } from "./BusinessCTA";
+// import { BusinessCTA } from "./BusinessCTA";
 import Footer from "./Footer"
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {

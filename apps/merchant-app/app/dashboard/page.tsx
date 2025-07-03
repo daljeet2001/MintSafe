@@ -2,12 +2,12 @@ import React from 'react';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../lib/auth";
-import prisma from "@repo/db/client"
+// import prisma from "@repo/db/client"
 
 
 // Components
 import AnimatedCounters from '../../components/AnimatedCounters';
-import Hero from "../../components/Hero";
+// import Hero from "../../components/Hero";
 import Features from "../../components/Features";
 import Statistics from "../../components/Statistics";
 import PricingSection from "../../components/PricingSection";
@@ -16,7 +16,7 @@ import FAQAccordion from "../../components/FAQAccordian";
 import IntegrationsSection from "../../components/IntegrationSections";
 import {BalanceCard} from "../../components/Balancev2"
 import {Transactions} from "../../components/Transactionsv2"
-import {WelcomeCard} from "../../components/WelcomeCard"
+// import {WelcomeCard} from "../../components/WelcomeCard"
 import {RequestCard} from "../../components/RequestCard"
 
 
