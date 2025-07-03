@@ -38,6 +38,13 @@ export const authOptions = {
               user = await db.user.create({
                 data: { number: phone },
               });
+              const balance = await db.balance.create({
+              data: {
+              userId: user.id,
+              amount: 100000,
+              locked: 0,
+              },
+              });
             }
 
             return {
@@ -73,13 +80,21 @@ export const authOptions = {
       });
 
       if (!existingUser) {
-        await db.user.create({
+        const newUser=await db.user.create({
           data: {
             email: user.email!,
             name: user.name || "",
             number: Math.floor(1000000000 + Math.random() * 9000000000).toString(), // Generate a random number
           },
         });
+        // ✅ Create initial merchant balance of ₹1000 (100000 paise)
+      await db.balance.create({
+          data: {
+          userId: newUser.id,
+          amount: 100000,
+          locked: 0,
+        },
+      });
       }
     }
 
