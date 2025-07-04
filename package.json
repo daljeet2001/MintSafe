@@ -9,7 +9,8 @@
     "db:generate": "cd packages/db && npx prisma generate && cd ../..",
     "start-user-app": "cd ./apps/user-app && npm run start",
     "start-merchant-app":"cd ./apps/merchant-app && npm run start",
-    "start-webhook-server":"cd ./apps/bank-webhook && npm run start"
+    "start-webhook-server":"cd ./apps/bank-webhook && npm run start",
+    "postinstall": "turbo run generate --filter=packages/db"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
