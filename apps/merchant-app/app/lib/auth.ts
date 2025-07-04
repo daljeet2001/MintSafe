@@ -8,7 +8,6 @@ const SERVICE_SID = process.env.TWILIO_SERVICE_SID!;
 
 export const authOptions = {
   providers: [
-    // ✅ OTP-based credentials provider
     CredentialsProvider({
       name: "PhoneOTP",
       credentials: {
@@ -32,18 +31,17 @@ export const authOptions = {
 
             if (!merchant) {
               merchant = await db.merchant.create({
-              data: { number: phone },
+                data: { number: phone },
               });
-              const balance = await db.merchantBalance.create({
-              data: {
-              merchantId: merchant.id,
-              amount: 100000,
-              locked: 0,
-              },
+
+              await db.merchantBalance.create({
+                data: {
+                  merchantId: merchant.id,
+                  amount: 100000,
+                  locked: 0,
+                },
               });
             }
-   
-
 
             return {
               id: merchant.id.toString(),
@@ -53,15 +51,14 @@ export const authOptions = {
             };
           }
 
-            return null;
-          } catch (error) {
-            console.error("OTP verification failed:", error);
-            return null;
-          }
+          return null;
+        } catch (error) {
+          console.error("OTP verification failed:", error);
+          return null;
+        }
       },
     }),
 
-    // ✅ GitHub OAuth
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
@@ -73,55 +70,61 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account, profile }: any) {
       if (account?.provider === "github") {
-        const email = profile?.email;
-        const name = profile?.name || "GitHub User";
+        const email = user.email || profile?.email;
+        const name = user.name || profile?.name || "GitHub User";
 
-        if (!email) return false;
+        if (!email) {
+          console.error("GitHub sign-in failed: no email found");
+          return false;
+        }
 
-        const existingMerchant = await db.merchant.findUnique({
+        let existingMerchant = await db.merchant.findUnique({
           where: { email },
         });
 
-    if (!existingMerchant) {
-      const newMerchant = await db.merchant.create({
-        data: {
-          email,
-          name,
-          number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
-        },
-      });
+        if (!existingMerchant) {
+          const newMerchant = await db.merchant.create({
+            data: {
+              email,
+              name,
+              number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+            },
+          });
 
-      // ✅ Create initial merchant balance of ₹1000 (100000 paise)
-      await db.merchantBalance.create({
-        data: {
-          merchantId: newMerchant.id,
-          amount: 100000,
-          locked: 0,
-        },
-      });
-    }
-  }
+          await db.merchantBalance.create({
+            data: {
+              merchantId: newMerchant.id,
+              amount: 100000,
+              locked: 0,
+            },
+          });
+        }
+      }
+
       return true;
     },
 
     async jwt({ token, user, account, profile }: any) {
-      // Handle OTP login
+      // OTP login
       if (user?.number) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
       }
 
-      // Handle GitHub login
-      if (account?.provider === "github" && profile?.email) {
-        const dbMerchant = await db.merchant.findUnique({
-          where: { email: profile.email },
-        });
+      // GitHub login
+      if (account?.provider === "github") {
+        const email = user?.email || profile?.email;
+        if (email) {
+          const dbMerchant = await db.merchant.findUnique({
+            where: { email },
+          });
 
-        if (dbMerchant) {
-          token.id = dbMerchant.id;
-          token.email = dbMerchant.email;
-          token.name = dbMerchant.name;
+          if (dbMerchant) {
+            token.id = dbMerchant.id;
+            token.email = dbMerchant.email;
+            token.name = dbMerchant.name;
+          }
         }
       }
 
