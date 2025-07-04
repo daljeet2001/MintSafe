@@ -20,6 +20,7 @@ export async function GET() {
         startTime: "desc",
       },
     });
+    console.log("Found:", transactions.length);
 
     return NextResponse.json(transactions);
   } catch (error) {
