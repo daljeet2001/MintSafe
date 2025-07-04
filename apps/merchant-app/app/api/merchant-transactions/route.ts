@@ -3,6 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client"
 
+type Transaction = {
+  time: Date;
+  amount: number;
+  status: string;
+  provider: string;
+};
+
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -16,7 +23,7 @@ export async function GET(req: Request) {
     where: { merchantId: Number(session.merchant.id) },
   });
 
-  const requestedFormatted = requested.map((t) => ({
+  const requestedFormatted = requested.map((t:any) => ({
     time: t.startTime,
     amount: t.amount,
     status: t.status,
@@ -28,7 +35,7 @@ export async function GET(req: Request) {
     where: { merchantId: Number(session.merchant.id) },
   });
 
-  const downRampFormatted = downRamp.map((t) => ({
+  const downRampFormatted = downRamp.map((t:any) => ({
     time: t.startTime,
     amount: t.amount,
     status: t.status,
