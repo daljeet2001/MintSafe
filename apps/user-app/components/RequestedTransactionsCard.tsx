@@ -32,7 +32,7 @@ useEffect(() => {
 
   fetchTransactions(); // Initial fetch
 
-  const interval = setInterval(fetchTransactions, 6000); // Refetch every 6 seconds
+  const interval = setInterval(fetchTransactions, 15000); // Refetch every 15 secondsndue to neon read replica 
 
   return () => clearInterval(interval); // Cleanup on unmount
 }, []);
