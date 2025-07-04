@@ -32,7 +32,7 @@ useEffect(() => {
 
   fetchTransactions(); // Initial fetch
 
-  const interval = setInterval(fetchTransactions, 3000); // Refetch every 3 seconds
+  const interval = setInterval(fetchTransactions, 6000); // Refetch every 6 seconds
 
   return () => clearInterval(interval); // Cleanup on unmount
 }, []);
