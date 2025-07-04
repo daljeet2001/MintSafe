@@ -18,24 +18,30 @@ export const RequestedTransactionsCard = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [errors, setErrors] = useState<Record<number, string>>({});
 
-
 useEffect(() => {
   const fetchTransactions = async () => {
     try {
-      const res = await fetch("/api/requested-transactions");
+      const res = await fetch("/api/requested-transactions", {
+        cache: "no-store", // 👈 Important: prevent fetch caching
+      });
+
+      if (!res.ok) throw new Error("Fetch failed");
+
       const data = await res.json();
+      console.log("🔄 Polled transactions:", data);
       setTransactions(data);
     } catch (error) {
-      console.error("Failed to load transactions:", error);
+      console.error("❌ Failed to load transactions:", error);
     }
   };
 
   fetchTransactions(); // Initial fetch
 
-  const interval = setInterval(fetchTransactions, 15000); // Refetch every 15 secondsndue to neon read replica 
+  const interval = setInterval(fetchTransactions, 15000); // 👈 15s polling
 
-  return () => clearInterval(interval); // Cleanup on unmount
+  return () => clearInterval(interval); // Cleanup
 }, []);
+
 
 
  const handleApprove = async (id: number) => {
