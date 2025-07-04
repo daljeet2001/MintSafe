@@ -1,87 +1,31 @@
-# MintSafe
+🚀 Just launched a modern payment service built with a blazing-fast Turborepo monorepo architecture!
+From OTP logins to secure money transfers — it’s fully loaded. 💸✨
 
-A modern monorepo project powered by Turborepo is a payment service.
+🔧 Tech Stack:
+Frontend: Next.js + Tailwind CSS
 
-## Tech Stack
+Backend: Express.js
 
-- **Monorepo:** [Turborepo](https://turbo.build/)
-- **Frontend:** [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/)
-- **Backend:** [Express.js](https://expressjs.com/)
-- **Database:** [PostgreSQL](https://www.postgresql.org/)
-- **ORM:** [Prisma](https://www.prisma.io/)
-- **Authentication:** [NextAuth.js](https://next-auth.js.org/) **uses twilio for otp verification
-- **CI/CD Pipeline:** Integrated
-- **Containerization:** Docker (includes Dockerfile)
-- **Rate Limiting &Captchas
+DB: PostgreSQL + Prisma
 
----
+Auth: NextAuth.js + Twilio OTP
 
-## Using this example
+DevOps: Docker + CI/CD
 
-Run the following command:
+Security: Rate Limiting + CAPTCHA
 
-```sh
-npx create-turbo@latest
-```
+All powered under one roof with Turborepo 🛠️
 
-## What's inside?
+🧠 Designed for scale, security, and speed.
 
-This Turborepo includes the following packages/apps:
+🔗 Check it out:
+MintSafe: https://mint-safe-user-app.vercel.app/
+MintSafe Merchant: https://mint-safe-merchant-app.vercel.app/
+System Design: https://lnkd.in/d_3jqGVp
 
-### Apps and Packages
+#Nextjs #Turborepo #PostgreSQL #Prisma #Docker #Payments #WebDev #IndieHackers #FullStack
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
 
 # Getting Started Locally
 
@@ -110,13 +54,23 @@ Follow these steps to start the project locally:
    npx prisma db seed
    ```
 
-5. **Add a `.env` file to `apps/user-app`**
+5. **Add a `.env` file to `apps/user-app`** and `apps/merchant-app`
 
-Create a file named `.env` inside the `apps/user-app` directory with the following contents:
+Create a file named `.env` inside the `apps/user-app` directory and `apps/merchant-app`:
 
 ```
 NEXTAUTH_URL="http://localhost:3001"
 JWT_SECRET="your_jwt_secret"
+TWILIO_SERVICE_SID="your_twilio_service_sid"
+TWILIO_SID="your_twilio_sid"
+TWILIO_AUTH_TOKEN="your_twilio_auth_token"
+GITHUB_CLIENT_ID="your_github_client_id"
+GITHUB_CLIENT_SECRET="your_github_client_secret"
+UPSTASH_REDIS_REST_URL="your_upstash_url"
+UPSTASH_REDIS_REST_TOKEN="your_upstash_token"
+NEXT_PUBLIC_TURNSTILE_SITE_KEY="your_turnstile_site_key"
+TURNSTILE_SECRET_KEY="your_turnstile_secret_key"
+
 ```
 
 6. **Go back to the root directory**
@@ -129,15 +83,6 @@ JWT_SECRET="your_jwt_secret"
    npm run dev
    ```
 
-Your application should now be running
+Your application should now be running now🚀
 
-## Useful Links
 
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
