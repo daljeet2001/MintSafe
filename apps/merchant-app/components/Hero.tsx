@@ -1,5 +1,12 @@
 "use client";
+
+import { signIn } from "next-auth/react";
+
 export default function Hero() {
+  const handleGetStarted = async () => {
+    await signIn(undefined, { callbackUrl: "/dashboard" });
+  };
+
   return (
     <section className="py-24 px-6 text-center max-w-4xl mx-auto">
       <h1 className="text-5xl font-bold mb-4 leading-tight text-gray-900">
@@ -8,9 +15,14 @@ export default function Hero() {
       <p className="text-lg text-gray-600 mb-8">
         Accept payments, track transactions, and manage customers—all from a single dashboard.
       </p>
-      <button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-xl text-white font-medium text-sm shadow-xl">
+      <button
+        onClick={handleGetStarted}
+        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-xl text-white font-medium text-sm shadow-xl"
+      >
         Get Started
       </button>
     </section>
   );
 }
+
+
