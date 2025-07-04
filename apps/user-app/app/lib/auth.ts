@@ -72,55 +72,58 @@ export const authOptions = {
 
   callbacks: {
 
-    async signIn({ user, account, profile }:any) {
-    // Create user in DB if using GitHub and user doesn't exist
-    if (account.provider === "github") {
-      const existingUser = await db.user.findUnique({
-        where: { email: user.email! },
+async signIn({ user, account, profile }: any) {
+  if (account.provider === "github") {
+    if (!user?.email) {
+      console.error("GitHub user has no email");
+      return false;
+    }
+
+    const existingUser = await db.user.findUnique({
+      where: { email: user.email },
+    });
+
+    if (!existingUser) {
+      const newUser = await db.user.create({
+        data: {
+          email: user.email,
+          name: user.name || "",
+          number: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+        },
       });
 
-      if (!existingUser) {
-        const newUser=await db.user.create({
-          data: {
-            email: user.email!,
-            name: user.name || "",
-            number: Math.floor(1000000000 + Math.random() * 9000000000).toString(), // Generate a random number
-          },
-        });
-        // ✅ Create initial merchant balance of ₹1000 (100000 paise)
       await db.balance.create({
-          data: {
+        data: {
           userId: newUser.id,
           amount: 100000,
           locked: 0,
         },
       });
+    }
+  }
+
+  return true;
+}
+,
+
+async jwt({ token, user, account }: any) {
+  if (user) {
+    token.id = user.id;
+
+    if (account?.provider === "github" && user.email) {
+      const dbUser = await db.user.findUnique({
+        where: { email: user.email },
+      });
+
+      if (dbUser) {
+        token.id = dbUser.id;
       }
     }
+  }
 
-    return true;
-  },
-
-  async jwt({ token, user, account }:any) {
-    // If user is logging in for the first time (OAuth or credentials)
-    if (user) {
-      // For credentials (OTP), user already has id
-      token.id = user.id;
-
-      // For GitHub OAuth, fetch user from DB using email
-      if (account?.provider === "github") {
-        const dbUser = await db.user.findUnique({
-          where: { email: user.email! },
-        });
-
-        if (dbUser) {
-          token.id = dbUser.id; // ✅ store DB user ID in token
-        }
-      }
-    }
-
-    return token;
-  },
+  return token;
+}
+,
     async session({ token, session }: any) {
       session.user.id = token.id;
       return session;
