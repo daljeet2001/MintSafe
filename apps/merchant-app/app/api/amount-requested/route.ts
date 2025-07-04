@@ -3,6 +3,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client"
 
+type Transaction = {
+  status: string;
+  amount: number;
+};
+
+
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
 
@@ -19,7 +25,7 @@ export async function GET(req: Request) {
   let pendingRequested = 0;
   let receivedRequested = 0;
 
-  txns.forEach((t) => {
+  txns.forEach((t:Transaction) => {
     const status = t.status.toLowerCase();
     if (status === "processing") {
       pendingRequested += t.amount;
