@@ -58,7 +58,7 @@ const page = async () => {
     <AnimatedCounters />
     {/* <Statistics /> */}
     <PricingSection />
-    <Testimonials />
+    {/* <Testimonials /> */}
     <FAQAccordion />
   </div>
 </div>

@@ -1,5 +1,6 @@
 import Hero from "../components/Hero";
 import Statistics from "../components/Statistics";
+import AnimatedCounters from "../components/AnimatedCounters";
 import PricingSection from "../components/PricingSection";
 import Testimonials from "../components/Testimonials";
 import FAQAccordion from "../components/FAQAccordian";
@@ -16,8 +17,11 @@ export default async function  MerchantLandingPage() {
       <PlinkoBanner />
       <Hero />
       {/* <Statistics /> */}
+      <AnimatedCounters />
+      {/* <Features /> */}
+      {/* <IntegrationsSection /> */}
       <PricingSection />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <FAQAccordion />
      
     </div>
