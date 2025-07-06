@@ -1,7 +1,6 @@
-// components/merchant/FAQAccordion.tsx
 "use client";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
@@ -22,23 +21,34 @@ export default function FAQAccordion() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="py-20 bg-gray-100">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">FAQs</h2>
-        <div className="space-y-4">
+    <section className="py-20 bg-[#f9fafb]">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <p className="text-sm font-semibold text-indigo-500 uppercase tracking-wide mb-2">
+            Frequently Ask Question
+          </p>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+            You ask?{" "}
+            <span className="italic font-medium text-gray-800">We answer</span>
+          </h2>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-4">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl shadow p-4 cursor-pointer"
+              className="border-b last:border-none pb-4 cursor-pointer"
               onClick={() => setOpen(open === i ? null : i)}
             >
               <div className="flex justify-between items-center">
-                <h3 className="font-semibold text-lg">{faq.question}</h3>
-                <ChevronDown
-                  className={`transition-transform duration-300 ${
-                    open === i ? "rotate-180" : "rotate-0"
-                  }`}
-                />
+                <h3 className="text-base sm:text-lg font-medium text-gray-900">
+                  {faq.question}
+                </h3>
+                {open === i ? (
+                  <Minus className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <Plus className="w-5 h-5 text-gray-500" />
+                )}
               </div>
               {open === i && (
                 <p className="text-gray-600 mt-2 text-sm">{faq.answer}</p>

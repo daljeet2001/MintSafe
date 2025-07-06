@@ -2,11 +2,11 @@
 
 const testimonials = [
   {
-    name: "Anjali Traders",
+    name: "Annonymous",
     feedback: "MintSafe has completely streamlined our daily operations. Payments are fast and reliable.",
   },
   {
-    name: "City Bookstore",
+    name: "Annonymous",
     feedback: "The dashboard insights help us track customer trends easily. Highly recommended!",
   },
 ];

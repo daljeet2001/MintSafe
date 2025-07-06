@@ -8,12 +8,11 @@ import prisma from "@repo/db/client"
 // Components
 import AnimatedCounters from '../../components/AnimatedCounters';
 import Hero from "../../components/Hero";
-import Features from "../../components/Features";
 import Statistics from "../../components/Statistics";
 import PricingSection from "../../components/PricingSection";
 import Testimonials from "../../components/Testimonials";
 import FAQAccordion from "../../components/FAQAccordian";
-import IntegrationsSection from "../../components/IntegrationSections";
+import PlinkoBanner from "../../components/PlinkoBanner";
 import {BalanceCard} from "../../components/Balancev2"
 import {Transactions} from "../../components/Transactionsv2"
 import {WelcomeCard} from "../../components/WelcomeCard"
@@ -55,10 +54,9 @@ const page = async () => {
     </div>
 
     {/* Lower Sections */}
+    <PlinkoBanner />
     <AnimatedCounters />
-    <Features />
-    <IntegrationsSection />
-    <Statistics />
+    {/* <Statistics /> */}
     <PricingSection />
     <Testimonials />
     <FAQAccordion />
