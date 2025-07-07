@@ -86,7 +86,7 @@ export const TransferForm = ({
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-xl w-full max-w-md space-y-6">
-      <h2 className="text-xl font-semibold text-[#1E1E1F]">Request Money</h2>
+      <h2 className="text-xl font-semibold text-[#1E1E1F]">Transfer Money</h2>
 
       {/* Wallet info */}
       <div className="bg-gray-100 rounded-xl p-4 space-y-2 shadow-inner">
