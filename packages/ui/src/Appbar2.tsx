@@ -22,7 +22,7 @@ export const Appbar = ({ merchant, onSignin, onSignout }: AppbarProps) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between h-12">
         {/* Logo */}
         <div className="flex items-center h-full">
-          <Store className="w-8 h-8 text-indigo-500" />
+          {/* <Store className="w-8 h-8 text-indigo-500" /> */}
           <span className="ml-2 font-bold text-xl text-[#1E1E1F]">
             MintSafe Merchant
           </span>

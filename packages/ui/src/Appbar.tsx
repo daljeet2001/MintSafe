@@ -19,8 +19,8 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between h-12">
         {/* Logo */}
         <div className="flex items-center h-full">
-          <Store className="w-8 h-8 text-[#14BA6C]" />
-          <span className="ml-2 font-bold text-xl text-[#14BA6C]">
+          {/* <Store className="w-8 h-8 text-[#14BA6C]" /> */}
+          <span className="ml-2 font-bold text-xl text-[#1E1E1F]">
             MintSafe
           </span>
         </div>
