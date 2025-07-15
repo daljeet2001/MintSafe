@@ -2,14 +2,14 @@ import { Button } from "./loginbutton";
 import { Store } from "lucide-react";
 
 interface AppbarProps {
-  user?: {
+  merchant?: {
     name?: string | null;
   };
   onSignin: () => void;
   onSignout: () => void;
 }
 
-export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
+export const Appbar = ({ merchant, onSignin, onSignout }: AppbarProps) => {
   const getInitial = (name: string | null | undefined) => {
     return name?.charAt(0).toUpperCase() || "?";
   };
@@ -27,16 +27,16 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
 
         {/* Right section */}
         <div className="flex items-center gap-4">
-          {user?.name && (
+          {merchant?.name && (
             <div className="flex items-center gap-2">
               {/* Avatar */}
             <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                <span className="font-medium text-gray-600 dark:text-gray-300">{getInitial(user.name)}</span>
+                <span className="font-medium text-gray-600 dark:text-gray-300">{getInitial(merchant.name)}</span>
             </div>
             </div>
           )}
-          <Button onClick={user ? onSignout : onSignin}>
-            {user ? "Log Out" : "Sign Up/Log In"}
+          <Button onClick={merchant ? onSignout : onSignin}>
+            {merchant ? "Log Out" : "Sign Up/Log In"}
           </Button>
         </div>
       </div>
