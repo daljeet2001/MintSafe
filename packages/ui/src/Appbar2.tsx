@@ -1,18 +1,15 @@
-import { Button } from "./button2";
+import { Button } from "./loginbutton";
 import { Store } from "lucide-react";
 
 interface AppbarProps {
-  merchant?: {
-      id: string | number;
-      email: string;
-      name?: string | null;
-    };
-
+  user?: {
+    name?: string | null;
+  };
   onSignin: () => void;
   onSignout: () => void;
 }
 
-export const Appbar = ({ merchant, onSignin, onSignout }: AppbarProps) => {
+export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   const getInitial = (name: string | null | undefined) => {
     return name?.charAt(0).toUpperCase() || "?";
   };
@@ -22,7 +19,7 @@ export const Appbar = ({ merchant, onSignin, onSignout }: AppbarProps) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between h-12">
         {/* Logo */}
         <div className="flex items-center h-full">
-          {/* <Store className="w-8 h-8 text-indigo-500" /> */}
+          {/* <Store className="w-8 h-8 text-[#14BA6C]" /> */}
           <span className="ml-2 font-bold text-xl text-[#1E1E1F]">
             MintSafe Merchant
           </span>
@@ -30,25 +27,19 @@ export const Appbar = ({ merchant, onSignin, onSignout }: AppbarProps) => {
 
         {/* Right section */}
         <div className="flex items-center gap-4">
-          {merchant?.name && (
+          {user?.name && (
             <div className="flex items-center gap-2">
               {/* Avatar */}
-              <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                {getInitial(merchant.name)}
-              </div>
-
-              {/* User name shown only on md+ */}
-              <span className="hidden md:inline text-sm font-medium text-gray-800">
-                {merchant.name}
-              </span>
+            <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                <span className="font-medium text-gray-600 dark:text-gray-300">{getInitial(user.name)}</span>
+            </div>
             </div>
           )}
-          <Button onClick={merchant ? onSignout : onSignin}>
-            {merchant ? "Logout" : "Login"}
+          <Button onClick={user ? onSignout : onSignin}>
+            {user ? "Log Out" : "Sign Up/Log In"}
           </Button>
         </div>
       </div>
     </header>
   );
 };
-

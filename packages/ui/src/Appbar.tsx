@@ -1,4 +1,4 @@
-import { Button } from "./button";
+import { Button } from "./loginbutton";
 import { Store } from "lucide-react";
 
 interface AppbarProps {
@@ -30,18 +30,13 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
           {user?.name && (
             <div className="flex items-center gap-2">
               {/* Avatar */}
-              <div className="w-8 h-8 bg-[#14BA6C] text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                {getInitial(user.name)}
-              </div>
-
-              {/* User name shown only on md+ */}
-              <span className="hidden md:inline text-sm font-medium text-gray-800">
-                {user.name}
-              </span>
+            <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                <span className="font-medium text-gray-600 dark:text-gray-300">{getInitial(user.name)}</span>
+            </div>
             </div>
           )}
           <Button onClick={user ? onSignout : onSignin}>
-            {user ? "Logout" : "Login"}
+            {user ? "Log Out" : "Sign Up/Log In"}
           </Button>
         </div>
       </div>
