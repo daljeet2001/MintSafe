@@ -27,14 +27,6 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
 
         {/* Right section */}
         <div className="flex items-center gap-4">
-          {user?.name && (
-            <div className="flex items-center gap-2">
-              {/* Avatar */}
-            <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                <span className="font-medium text-gray-600 dark:text-gray-300">{getInitial(user.name)}</span>
-            </div>
-            </div>
-          )}
           <Button onClick={user ? onSignout : onSignin}>
             {user ? "Log Out" : "Sign Up/Log In"}
           </Button>
