@@ -14,7 +14,7 @@ export default async function  MerchantLandingPage() {
     if (session?.user) redirect("/dashboard");
   return (
     <div className="bg-[#F6F8FF] text-black">
-      <PlinkoBanner />
+      {/* <PlinkoBanner /> */}
       <Hero />
       {/* <Statistics /> */}
       <AnimatedCounters />
