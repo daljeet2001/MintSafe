@@ -1,39 +1,34 @@
-"use client";
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
 
-import { ArrowRight } from "lucide-react";
-import { Button } from "@repo/ui/button";
-
-interface CallToActionProps {
-  onGetStarted?: () => void;
-  onContactSales?: () => void;
-}
-
-export function CallToAction({ 
-  onGetStarted = () => {}, 
-  onContactSales = () => {} 
-}: CallToActionProps) {
+export default function CallToAction() {
   return (
-    <section className="py-20 px-4 bg-white">
-      <div className="max-w-4xl mx-auto text-center bg-[#14BA6C]/10 p-12 rounded-2xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-          Ready to simplify your payments?
-        </h2>
-        <p className="text-xl mb-10 text-gray-600">
-          Join thousands of happy customers enjoying fast, secure payments today.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button 
-            onClick={onGetStarted}      
-          >
-            Get Started for Free <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button 
-            onClick={onContactSales}
-          >
-            Contact Sales
-          </Button>
+    <div className="max-w-7xl mx-auto p-6">
+      <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row bg-white text-black ">
+        {/* Left Image */}
+        <div className="md:w-1/2 w-full h-64 md:h-auto">
+          <img
+            src="https://images.unsplash.com/photo-1671824793536-6f01dfac8f37?q=80&w=1625&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Dog playing"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Right Content */}
+        <div className="md:w-1/2 w-full flex flex-col justify-center px-8 py-10">
+         <h2 className="text-2xl md:text-3xl font-bold mb-4">Start Accepting Payments Today!</h2>
+          <p className="text-base md:text-lg mb-6 leading-relaxed">
+            Are you a business owner or merchant looking for a secure and seamless payment solution? 
+            Join MintSafe to accept payments instantly, manage transactions effortlessly, and grow your business.
+          </p>
+
+          <a href="https://mint-safe-merchant-app.vercel.app" className="bg-[#F5B041] hover:opacity-90 text-white font-semibold rounded-full px-6 py-3 text-sm md:text-base flex items-center w-max transition">
+            Join as a Merchant
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </a>
+
         </div>
       </div>
-    </section>
+    </div>
   );
 }

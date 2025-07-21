@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "./lib/auth";
 import FAQAccordion from "../components/FAQAccordion";
-
+import CallToAction from "../components/CallToAction";
 
 
 
@@ -31,6 +31,7 @@ export default async function LandingPage() {
           {/* <HeroSection />
           <FeaturesGrid /> */}
           <SupportBanner />
+          <CallToAction/>
           {/* <BusinessSection /> */}
           <FAQAccordion/>
         </div>
