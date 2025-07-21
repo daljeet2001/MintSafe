@@ -87,7 +87,7 @@ export const DepositCard = () => {
       <div>
         <div className="flex justify-between items-center text-sm font-medium text-[#1E1E1F] mb-2">
           <span>Payment method</span>
-          <button className="text-[#14BA6C] hover:underline text-sm">
+          <button className="text-[#F5B041] hover:underline text-sm">
             Change
           </button>
         </div>
@@ -102,7 +102,7 @@ export const DepositCard = () => {
               onClick={() => handleBankSelect(idx)}
             >
               <div className="flex items-center gap-3">
-                <Building className="w-4 h-4 text-[#14BA6C]" />
+                <Building className="w-4 h-4 text-[#F5B041]" />
                 <div className="text-sm">
                   <div className="font-medium text-[#1E1E1F]">{bank.name}</div>
                 </div>
@@ -116,7 +116,7 @@ export const DepositCard = () => {
       </div>
 
       {/* Confirm Button */}
-      <button className="w-full py-3 bg-[#14BA6C] text-white font-semibold text-sm rounded-full hover:bg-[#119f5b] transition"
+      <button className="w-full py-3 bg-[#F5B041] text-white font-semibold text-sm rounded-full hover:bg-[#D68910] transition"
           onClick={async () => {
             const provider = SUPPORTED_BANKS[selectedBank]!;
          

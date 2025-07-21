@@ -6,6 +6,7 @@ import { Testimonials } from "../components/Testimonials";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "./lib/auth";
+import FAQAccordion from "../components/FAQAccordion";
 
 
 
@@ -27,10 +28,11 @@ export default async function LandingPage() {
 
         {/* Marketing Sections */}
         <div className="space-y-12">
-          <HeroSection />
-          <FeaturesGrid />
+          {/* <HeroSection />
+          <FeaturesGrid /> */}
           <SupportBanner />
-          <BusinessSection />
+          {/* <BusinessSection /> */}
+          <FAQAccordion/>
         </div>
       </div>
     </div>

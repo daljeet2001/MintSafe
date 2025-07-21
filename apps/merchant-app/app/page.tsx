@@ -20,7 +20,7 @@ export default async function  MerchantLandingPage() {
       <AnimatedCounters />
       {/* <Features /> */}
       {/* <IntegrationsSection /> */}
-      <PricingSection />
+      {/* <PricingSection /> */}
       {/* <Testimonials /> */}
       <FAQAccordion />
      

@@ -11,7 +11,7 @@ import { BusinessSection } from "../../components/BusinessSection";
 import { WelcomeCard } from "../../components/WelcomeCard";
 import { Testimonials } from "../../components/Testimonials";
 import {RequestedTransactionsCard} from "../../components/RequestedTransactionsCard";
-
+import FAQAccordion from "../../components/FAQAccordion";
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   // console.log(session)
@@ -58,10 +58,11 @@ export default async function DashboardPage() {
 
         {/* Marketing Sections */}
         <div className="space-y-12">
-          <HeroSection />
-          <FeaturesGrid />
+          {/* <HeroSection />
+          <FeaturesGrid /> */}
           <SupportBanner />
-          <BusinessSection />
+          {/* <BusinessSection /> */}
+          <FAQAccordion/>
         </div>
       </div>
     </div>

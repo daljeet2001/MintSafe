@@ -65,7 +65,7 @@ export const TransferForm = ({
   const getButtonStyle = () => {
     if (status === "success") return "bg-green-600 hover:bg-green-700";
     if (status === "error") return "bg-red-600 hover:bg-red-700";
-    return "bg-[#14BA6C] hover:bg-[#12a35e]";
+    return "bg-[#F5B041] hover:bg-[#D68910]";
   };
 
   const getButtonIcon = () => {
@@ -123,7 +123,7 @@ export const TransferForm = ({
       <div>
         <div className="flex justify-between items-center text-sm font-medium text-[#1E1E1F] mb-2">
           <span>Select user</span>
-          <button className="text-[#14BA6C] hover:underline text-sm">Invite new</button>
+          <button className="text-[#F5B041] hover:underline text-sm">Invite new</button>
         </div>
 
         <div className="bg-gray-50 rounded-xl shadow-sm">
@@ -137,7 +137,7 @@ export const TransferForm = ({
               onClick={() => handleUserSelect(idx)}
             >
               <div className="flex items-center gap-3">
-                <UserIcon className="w-4 h-4 text-[#14BA6C]" />
+                <UserIcon className="w-4 h-4 text-[#F5B041]" />
                 <div className="text-sm">
                   <div className="font-medium text-[#1E1E1F]">
                     {user.name || "anonymous"}

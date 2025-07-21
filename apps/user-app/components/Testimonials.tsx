@@ -26,7 +26,7 @@ export function Testimonials() {
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <span className="inline-block px-3 py-1 text-xs font-semibold text-[#14BA6C] bg-green-50 rounded-full mb-4">
+          <span className="inline-block px-3 py-1 text-xs font-semibold text-[#F5B041]  rounded-full mb-4">
             TESTIMONIALS
           </span>
           <h2 className="text-3xl font-bold text-gray-900">What our customers say</h2>
@@ -38,7 +38,7 @@ export function Testimonials() {
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
-                    className={`h-5 w-5 ${i < testimonial.rating ? 'text-[#14BA6C] fill-[#14BA6C]' : 'text-gray-300'}`} 
+                    className={`h-5 w-5 ${i < testimonial.rating ? 'text-[#F5B041] fill-[#F5B041]' : 'text-gray-300'}`} 
                   />
                 ))}
               </div>

@@ -57,7 +57,7 @@ const page = async () => {
     {/* <PlinkoBanner /> */}
     <AnimatedCounters />
     {/* <Statistics /> */}
-    <PricingSection />
+    {/* <PricingSection /> */}
     {/* <Testimonials /> */}
     <FAQAccordion />
   </div>

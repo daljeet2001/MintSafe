@@ -40,9 +40,9 @@ export const BalanceCard = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-sm text-gray-500">Total Balance</h2>
-            <p className="text-3xl font-bold text-[#14BA6C]">₹{total}</p>
+            <p className="text-3xl font-bold text-[#F5B041]">₹{total}</p>
           </div>
-          <div className="bg-[#14BA6C] p-3 rounded-full">
+          <div className="bg-[#F5B041] p-3 rounded-full">
             <Wallet className="text-white w-6 h-6" />
           </div>
         </div>
@@ -51,11 +51,11 @@ export const BalanceCard = () => {
         <div className="mt-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Unlocked Balance</span>
-            <span className="font-medium text-green-600">₹{unlocked}</span>
+            <span className="font-medium text-[#F5B041]">₹{unlocked}</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-gray-400">Locked Balance</span>
-            <span className="text-green-500">₹{lockedAmount}</span>
+            <span className="text-[#F5B041] opacity-70 ">₹{lockedAmount}</span>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export const BalanceCard = () => {
         <div className="mt-6 flex gap-3">
           <button
             onClick={() => setShowTransfer(true)}
-            className="bg-[#14BA6C] text-white text-sm font-medium px-4 py-2 rounded-full shadow hover:bg-[#12a35e] transition"
+            className="bg-[#F5B041] text-white text-sm font-medium px-4 py-2 rounded-full shadow hover:bg-[#D68910] transition"
           >
             Transfer
           </button>

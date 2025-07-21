@@ -24,7 +24,7 @@ export default function FAQAccordion() {
     <section className="py-20 bg-[#f9fafb]">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-indigo-500 uppercase tracking-wide mb-2">
+          <p className="text-sm font-semibold text-[#F5B041] uppercase tracking-wide mb-2">
             Frequently Ask Question
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
