@@ -11,10 +11,7 @@ const faqs = [
     question: "How withdrawals and deposits work?",
     answer: "You first make the withdraw/deposit you will be redirected to baking page then go to db get your token,userId,amount from downramptransactions,onramptransactions then go to postman to hit our webhook server to change status of transaction to suuccess and you are all good",
   },
-  {
-    question: "Do I need a developer to integrate?",
-    answer: "Not at all. Use our 1-click integrations or plugins easily.",
-  },
+
 ];
 
 export default function FAQAccordion() {
