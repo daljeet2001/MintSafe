@@ -1,5 +1,4 @@
 🚀 Just launched a modern payment service built with a blazing-fast Turborepo monorepo architecture!
-From OTP logins to secure money transfers — it’s fully loaded. 💸✨
 
 🔧 Tech Stack:
 Frontend: Next.js + Tailwind CSS
@@ -8,7 +7,7 @@ Backend: Express.js
 
 DB: PostgreSQL + Prisma
 
-Auth: NextAuth.js + Twilio OTP
+Auth: NextAuth.js + Twilio
 
 DevOps: Docker + CI/CD
 
