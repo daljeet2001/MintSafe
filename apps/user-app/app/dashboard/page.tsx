@@ -50,7 +50,7 @@ export default async function DashboardPage() {
 
         {/* Testimonials Section */}
         <div className="mt-8">
-          <Testimonials />
+          {/* <Testimonials /> */}
         </div>
 
         {/* Divider */}
@@ -60,7 +60,7 @@ export default async function DashboardPage() {
         <div className="space-y-12">
           {/* <HeroSection />
           <FeaturesGrid /> */}
-          <SupportBanner />
+          {/* <SupportBanner /> */}
           {/* <BusinessSection /> */}
           <FAQAccordion/>
         </div>
