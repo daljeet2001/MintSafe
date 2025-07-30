@@ -1,5 +1,5 @@
 🚀 Just launched a modern payment service built with a blazing-fast Turborepo monorepo architecture!
-
+![NFX UI Screenshot](./assets/design.png)
 🔧 Tech Stack:
 Frontend: Next.js + Tailwind CSS
 
