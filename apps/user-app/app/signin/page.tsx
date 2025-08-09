@@ -153,7 +153,7 @@ export default function SignInPage() {
               
               <div className="mt-4">
                 <Turnstile
-                  siteKey="0x4AAAAAABi1GDXcVlMalohh"
+                  siteKey="0x4AAAAAABp26TuBGwFsIQgz"
                   onSuccess={(token) => setToken(token)}
                   className="w-full"
                 />
