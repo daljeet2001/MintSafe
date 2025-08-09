@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import {Store} from "lucide-react"
+import {Store} from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function SignInPage() {
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phone, setPhone] = useState("");
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(""));
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
   const [resendTimer, setResendTimer] = useState(30);
   const router = useRouter();
 
@@ -33,7 +35,26 @@ export default function SignInPage() {
   };
 
   const sendOtp = async () => {
+    if (!/^\d{10}$/.test(phone)) return toast.error("Enter valid phone number");
+    if (!token) return toast.error("Please complete CAPTCHA");
     setLoading(true);
+
+     // ✅ Verify Turnstile CAPTCHA server-side
+    const verifyRes = await fetch("/api/verify-turnstile", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+
+    const verifyData = await verifyRes.json();
+
+    if (!verifyData.success) {
+      toast.error("CAPTCHA verification failed.");
+      setLoading(false);
+      return;
+    }
+
+
+
     try {
       const res = await fetch("/api/send-otp", {
         method: "POST",
@@ -130,6 +151,15 @@ export default function SignInPage() {
                 </svg>
                 Continue with GitHub
               </button>
+
+              
+              <div className="mt-4">
+                <Turnstile
+                  siteKey="0x4AAAAAABi1GDXcVlMalohh"
+                  onSuccess={(token) => setToken(token)}
+                  className="w-full"
+                />
+              </div>
             </>
           ) : (
             <>
